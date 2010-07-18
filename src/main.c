@@ -32,7 +32,15 @@ void kmain(void* mbd, unsigned int magic)
     idt_init();
     
     text_init();
-    puts(":: Text-mode VGA initialized\n");
+    puts(":: Text-mode ");
+    set_text_color_foreground(red);
+    puts("V");
+    set_text_color_foreground(green);
+    puts("G");
+    set_text_color_foreground(blue);
+    puts("A");
+    set_text_color_foreground(light_gray);
+    puts(" initialized\n");
 
     /* Just for kicks */
     char *boot_loader_name = (char*) ((long*) mbd)[16];
