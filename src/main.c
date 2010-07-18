@@ -20,6 +20,8 @@
 #include <text.h>
 #include <gdt.h>
 #include <idt.h>
+#include <isrs.h>
+#include <irq.h>
 
 void kmain(void* mbd, unsigned int magic)
 {
@@ -31,6 +33,8 @@ void kmain(void* mbd, unsigned int magic)
     gdt_init();
     idt_init();
     isrs_init();
+    irq_init();
+    __asm__ __volatile__ ("sti");
     
     text_init();
     puts(":: Text-mode ");
