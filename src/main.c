@@ -26,15 +26,14 @@ void kmain(void* mbd, unsigned int magic)
     {
         for (;;);
     }
-    
-    char *boot_loader_name = (char*) ((long*) mbd)[16];
+
+    gdt_init();
     
     text_init();
     puts(":: Text-mode VGA initialized\n");
 
-    gdt_init();
-    puts(":: GDT initialized\n");
-    
+    /* Just for kicks */
+    char *boot_loader_name = (char*) ((long*) mbd)[16];
     puts(":: Booted with ");
     set_text_color_foreground(white);
     puts(boot_loader_name);
