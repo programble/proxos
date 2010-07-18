@@ -102,6 +102,18 @@ void putch(u8 c)
         {
             cursor_x--;
         }
+        /* Blank it */
+        putch(' ');
+        /* Move the cursor back one again */
+        if (cursor_x == 0)
+        {
+            cursor_y--;
+            cursor_x = COLS - 1;
+        }
+        else
+        {
+            cursor_x--;
+        }
     }
     /* Tab (must die) */
     else if (c == 0x09)
