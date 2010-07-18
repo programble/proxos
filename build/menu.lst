@@ -1,0 +1,8 @@
+default 0
+timeout 10
+ 
+title Proxos
+kernel /boot/kernel.bin
+
+title Boot from first hard disk
+chainloader (hd0)+1
