@@ -23,6 +23,7 @@
 #include <isrs.h>
 #include <irq.h>
 #include <timer.h>
+#include <keyboard.h>
 
 void kmain(void* mbd, unsigned int magic)
 {
@@ -38,18 +39,8 @@ void kmain(void* mbd, unsigned int magic)
     __asm__ __volatile__ ("sti");
     
     text_init();
-    puts(":: Text-mode ");
-    set_text_color_foreground(red);
-    puts("V");
-    set_text_color_foreground(green);
-    puts("G");
-    set_text_color_foreground(blue);
-    puts("A");
-    set_text_color_foreground(light_gray);
-    puts(" initialized\n");
-
     timer_init();
-    puts(":: System timer initialized\n");
+    keyboard_init();
 
     /* Just for kicks */
     char *boot_loader_name = (char*) ((long*) mbd)[16];

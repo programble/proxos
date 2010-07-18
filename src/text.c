@@ -37,6 +37,16 @@ void text_init()
     background = black;
     /* Clear the screen */
     clear();
+    /* Print out status */
+    puts(":: Text-mode ");
+    set_text_color_foreground(red);
+    puts("V");
+    set_text_color_foreground(green);
+    puts("G");
+    set_text_color_foreground(blue);
+    puts("A");
+    set_text_color_foreground(light_gray);
+    puts(" initialized\n");
 }
 
 void clear()

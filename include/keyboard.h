@@ -16,35 +16,18 @@
  *  along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <timer.h>
+#ifndef __KEYBOARD_H__
+#define __KEYBOARD_H__
 
-int timer_ticks = 0;
+#include <system.h>
+#include <text.h>
+#include <irq.h>
 
-void timer_handler(struct regs *r)
-{
-    /* To get gcc to shut the fuck up about unused parameter */
-    r = r;
-    
-    timer_ticks++;
+char *keymap;
+char *keymap_shift;
 
-    /* Second test */
-    /*if (timer_ticks % 100 == 0)
-      puts(":");*/
-}
+u8 shift;
 
-void timer_phase(int hz)
-{
-    int divisor = 1193180 / hz;
-    outportb(0x43, 0x36);
-    outportb(0x40, divisor & 0xFF);
-    outportb(0x40, divisor >> 8);
-}
+void keyboard_init();
 
-void timer_init()
-{
-    /* Set frequency to 100 */
-    timer_phase(100);
-    /* Install handler */
-    irq_install_handler(0, timer_handler);
-    puts(":: System timer initialized\n");
-}
+#endif
