@@ -16,25 +16,36 @@
  *  along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SYSTEM_H__
-#define __SYSTEM_H__
+#include <gdt.h>
 
-typedef unsigned char u8;
-typedef signed char s8;
-typedef unsigned short u16;
-typedef signed short s16;
-typedef unsigned int u32;
-typedef signed int s32;
-typedef unsigned long u64;
-typedef signed long s64;
+struct gdt_entry gdt[3];
+struct gdt_ptr gp;
 
-u8 inportb(u16);
-void outportb (u16, u8);
+extern void gdt_flush();
 
-int strlen(char*);
+void gdt_set_gate(int num, u64 base, u64 limit, u8 access, u8 gran)
+{
+    gdt[num].base_low = (base & 0xFFFF);
+    gdt[num].base_middle = (base >> 16) & 0xFF;
+    gdt[num].base_high = (base >> 24) & 0xFF;
 
-u8 *memcpy(u8*, const u8*, int);
-u8 *memset(u8*, u8, int);
-u16 *memsetw(u16*, u16, int);
+    gdt[num].limit_low = (limit & 0xFFFF);
+    gdt[num].granularity = ((limit >> 16) & 0x0F);
 
-#endif
+    gdt[num].granularity |= (gran & 0xF0);
+    gdt[num].access = access;
+}
+
+void gdt_init()
+{
+    gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
+    gp.base = (u32) &gdt;
+
+    gdt_set_gate(0, 0, 0, 0, 0);
+
+    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
+
+    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
+
+    gdt_flush();
+}

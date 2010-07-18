@@ -16,25 +16,31 @@
  *  along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SYSTEM_H__
-#define __SYSTEM_H__
+#ifndef __GDT_H__
+#define __GDT_H__
 
-typedef unsigned char u8;
-typedef signed char s8;
-typedef unsigned short u16;
-typedef signed short s16;
-typedef unsigned int u32;
-typedef signed int s32;
-typedef unsigned long u64;
-typedef signed long s64;
+#include <system.h>
 
-u8 inportb(u16);
-void outportb (u16, u8);
+struct gdt_entry
+{
+    u16 limit_low;
+    u16 base_low;
+    u8 base_middle;
+    u8 access;
+    u8 granularity;
+    u8 base_high;
+} __attribute__((packed));
 
-int strlen(char*);
+struct gdt_ptr
+{
+    u16 limit;
+    u32 base;
+} __attribute__((packed));
 
-u8 *memcpy(u8*, const u8*, int);
-u8 *memset(u8*, u8, int);
-u16 *memsetw(u16*, u16, int);
+/* Defined in loader.s */
+extern void gdt_flush();
+
+void gdt_set_gate(int, u64, u64, u8, u8);
+void gdt_init();
 
 #endif

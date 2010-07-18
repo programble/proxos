@@ -18,10 +18,11 @@
 
 #include <system.h>
 #include <text.h>
+#include <gdt.h>
 
 void kmain(void* mbd, unsigned int magic)
 {
-    if ( magic != 0x2BADB002 )
+    if (magic != 0x2BADB002)
     {
         for (;;);
     }
@@ -30,6 +31,10 @@ void kmain(void* mbd, unsigned int magic)
     
     text_init();
     puts(":: Text-mode VGA initialized\n");
+
+    gdt_init();
+    puts(":: GDT initialized\n");
+    
     puts(":: Booted with ");
     set_text_color_foreground(white);
     puts(boot_loader_name);
