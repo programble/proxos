@@ -37,7 +37,7 @@ function asm
 function cc
 {
     echo " [ CC ] $1"
-    $CC -std=c99 -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs -Iinclude/ -o $2 -c $1
+    $CC -std=c99 -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs -nostdinc -ffreestanding -fno-builtin -Iinclude/ -o $2 -c $1
     if [ $? -ne 0 ]; then
         echo " [ ERROR ]"
         exit
@@ -72,7 +72,7 @@ cp build/menu.lst output/iso/boot/grub/
 cp output/kernel.bin output/iso/boot/
 
 echo " [ ISO ] proxos.iso"
-$MKISO -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o proxos.iso output/iso/
+$MKISO -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o proxos.iso output/iso/ 2> /dev/null
 if [ $? -ne 0 ]; then
     echo " [ ERROR ]"
     exit

@@ -22,11 +22,14 @@ int timer_ticks = 0;
 
 void timer_handler(struct regs *r)
 {
+    /* To get gcc to shut the fuck up about unused parameter */
+    r = r;
+    
     timer_ticks++;
 
     /* Second test */
     if (timer_ticks % 100 == 0)
-        puts(":");
+        puts(":\n");
 }
 
 void timer_phase(int hz)

@@ -33,7 +33,7 @@ void outportb (u16, u8);
 
 int strlen(char*);
 
-u8 *memcpy(u8*, const u8*, int);
+u8 *memcpy(u8*, u8*, int);
 u8 *memset(u8*, u8, int);
 u16 *memsetw(u16*, u16, int);
 

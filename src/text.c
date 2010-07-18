@@ -69,7 +69,7 @@ void scroll()
     {
         /* Move everything up one line */
         temp = cursor_y - ROWS + 1;
-        memcpy(vram, vram + temp * COLS, (ROWS - temp) * COLS * 2);
+        memcpy((u8*) vram, (u8*) (vram + temp * COLS), (ROWS - temp) * COLS * 2);
 
         /* Blank the bottom line */
         memsetw(vram + (ROWS - temp) * COLS, blank, COLS);

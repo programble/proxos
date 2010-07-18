@@ -37,7 +37,7 @@ int strlen(char *str)
     return i;
 }
 
-u8 *memcpy(u8 *dest, const u8 *src, int count)
+u8 *memcpy(u8 *dest, u8 *src, int count)
 {
     for (int i = 0; i < count; i++)
         dest[i] = src[i];
