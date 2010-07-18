@@ -26,7 +26,7 @@ void timer_handler(struct regs *r)
 
     /* Second test */
     if (timer_ticks % 100 == 0)
-        puts(":: One second passed, oh my!\n");
+        puts(":");
 }
 
 void timer_phase(int hz)
