@@ -30,6 +30,7 @@ void kmain(void* mbd, unsigned int magic)
 
     gdt_init();
     idt_init();
+    isrs_init();
     
     text_init();
     puts(":: Text-mode ");
@@ -49,4 +50,8 @@ void kmain(void* mbd, unsigned int magic)
     puts(boot_loader_name);
     set_text_color_foreground(light_gray);
     puts("\n");
+
+    /* ISR Test */
+    puts(":: Stand back! I am going to divide by zero!");
+    putch(0x65 / 0);
 }
