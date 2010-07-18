@@ -22,6 +22,7 @@
 #include <idt.h>
 #include <isrs.h>
 #include <irq.h>
+#include <timer.h>
 
 void kmain(void* mbd, unsigned int magic)
 {
@@ -47,6 +48,9 @@ void kmain(void* mbd, unsigned int magic)
     set_text_color_foreground(light_gray);
     puts(" initialized\n");
 
+    timer_init();
+    puts(":: System timer initialized\n");
+
     /* Just for kicks */
     char *boot_loader_name = (char*) ((long*) mbd)[16];
     puts(":: Booted with ");
@@ -56,6 +60,7 @@ void kmain(void* mbd, unsigned int magic)
     puts("\n");
 
     /* ISR Test */
-    puts(":: Stand back! I am going to divide by zero!");
-    putch(0x65 / 0);
+    /*puts(":: Stand back! I am going to divide by zero!");
+      putch(0x65 / 0);*/
+    for (;;);
 }
