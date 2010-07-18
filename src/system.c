@@ -57,3 +57,8 @@ u16 *memsetw(u16 *dest, u16 val, int count)
         dest[i] = val;
     return dest;
 }
+
+void halt()
+{
+    __asm__("cli; hlt;");
+}
