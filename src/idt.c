@@ -16,29 +16,27 @@
  *  along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <system.h>
-#include <text.h>
-#include <gdt.h>
 #include <idt.h>
 
-void kmain(void* mbd, unsigned int magic)
+struct idt_entry idt[256];
+struct idt_ptr idtp;
+
+void idt_set_gate(u8 num, u64 base, u16 sel, u8 flags)
 {
-    if (magic != 0x2BADB002)
-    {
-        for (;;);
-    }
+    idt[num].base_lo = (base & 0xFFFF);
+    idt[num].base_hi = (base >> 16) & 0xFF;
 
-    gdt_init();
-    idt_init();
-    
-    text_init();
-    puts(":: Text-mode VGA initialized\n");
+    idt[num].sel = sel;
+    idt[num].flags = flags;
+    idt[num].always0 = 0x0;
+}
 
-    /* Just for kicks */
-    char *boot_loader_name = (char*) ((long*) mbd)[16];
-    puts(":: Booted with ");
-    set_text_color_foreground(white);
-    puts(boot_loader_name);
-    set_text_color_foreground(light_gray);
-    puts("\n");
+void idt_init()
+{
+    idtp.limit = (sizeof (struct idt_entry) * 256) - 1;
+    idtp.base = (u32) &idt;
+
+    memset((u8*) &idt, 0, sizeof(struct idt_entry) * 256);
+
+    idt_load();
 }
