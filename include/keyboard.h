@@ -26,7 +26,8 @@
 char *keymap;
 char *keymap_shift;
 
-u8 shift;
+u8 left_shift;
+u8 right_shift;
 
 void keyboard_init();
 

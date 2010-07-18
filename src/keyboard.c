@@ -105,11 +105,30 @@ void keyboard_handler(struct regs *r)
 
     if (scancode & 0x80)
     {
-        /* Key released */
+        if (scancode == 0x2a + 0x80)
+        {
+            /* Left shift release */
+            left_shift = 0;
+        }
+        else if (scancode == 0x36 + 0x80)
+        {
+            /* Right shift release */
+            right_shift = 0;
+        }
+    }
+    else if (scancode == 0x2a)
+    {
+        /* Left shift press */
+        left_shift = 1;
+    }
+    else if (scancode == 0x36)
+    {
+        /* Right shift press */
+        right_shift = 1;
     }
     else
     {
-        if (shift)
+        if (left_shift || right_shift)
         {
             putch(keymap_shift[scancode]);
         }
@@ -122,7 +141,8 @@ void keyboard_handler(struct regs *r)
 
 void keyboard_init()
 {
-    shift = 0;
+    left_shift = 0;
+    right_shift = 0;
     keymap = keymap_us;
     keymap_shift = keymap_us_shift;
     puts(":: Using US keymap\n");
