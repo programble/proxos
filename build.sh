@@ -21,7 +21,7 @@
 [ $CC ] || CC=clang
 [ $LD ] || LD=ld
 [ $MKISO ] || MKISO=genisoimage
-[ $STAGE2 ] || STAGE2=/usr/lib/grub/i386-pc/stage2_eltorito
+[ $STAGE2 ] || STAGE2=build/stage2_eltorito
 
 # Ensure the output directory exists
 mkdir -p output
@@ -74,6 +74,7 @@ fi
 
 # Build ISO
 mkdir -p output/iso/boot/grub
+
 if [ ! -f output/iso/boot/grub/stage2_eltorito ]; then
     echo " [ CP ] $STAGE2 -> output/iso/boot/grub/stage2_eltorito"
     cp $STAGE2 output/iso/boot/grub/
