@@ -147,7 +147,7 @@ void putch(u8 c)
     /* Have we hit the EOL? */
     if (cursor_x >= COLS)
     {
-        cursor_x = 0;
+        cursor_x = cursor_x - COLS;
         cursor_y++;
     }
     scroll();
