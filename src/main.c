@@ -42,21 +42,11 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     timer_init();
     keyboard_init();
 
-    /* Just for kicks */
-    /*char *boot_loader_name = (char*) ((long*) mbd)[16];
-    puts(":: Booted with ");
-    set_text_color_foreground(white);
-    puts(boot_loader_name);
-    set_text_color_foreground(light_gray);
-    puts("\n");*/
     puts("\n:: Booted with ");
     puts(multiboot->boot_loader_name);
     puts(" (");
     puts(multiboot->cmdline);
     puts(")\n");
-
-    /*if (!link_kernel_end)
-      panic("Where the fuck does the kernel end?");*/
 
     puts(":: Kernel starts at 0x");
     puts(int_to_str((u32) link_kernel_entry, 16));
@@ -74,10 +64,6 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     puts(COMPILED);
     puts(")\n");
 
-    /* ISR Test */
-    /*puts(":: Stand back! I am going to divide by zero!");
-      putch(0x65 / 0);*/
-    /*assert(false);*/
     /* Idle loop */
     while (true)
     {
