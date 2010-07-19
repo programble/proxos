@@ -16,8 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
 
-# Load configuration
-. build.conf
+# Configuration
+[ $ASM ] || ASM=nasm
+[ $CC ] || CC=clang
+[ $LD ] || LD=ld
+[ $MKISO ] || MKISO=genisoimage
+[ $STAGE2 ] || STAGE2=/usr/lib/grub/i386-pc/stage2_eltorito
 
 # Ensure the output directory exists
 mkdir -p output

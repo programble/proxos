@@ -118,7 +118,7 @@ void putch(u8 c)
     /* Tab (must die) */
     else if (c == 0x09)
     {
-        while (++cursor_x % 8 != 0);
+        cursor_x = cursor_x - (cursor_x % 8) + 8;
     }
     /* Carriage return */
     else if (c == '\r')
