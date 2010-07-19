@@ -89,3 +89,50 @@ void _panic(char *message, char *file, char *line)
     puts("\n");
     halt();
 }
+
+char *int_to_str(u32 n, u32 radix)
+{
+    switch (radix)
+    {
+    case 2:
+    {
+        char numerals[2] = "01";
+        int i = 33;
+        static char buf[33];
+        do
+        {
+            i--;
+            buf[i] = numerals[n % 2];
+        } while ((n /= 2) > 0 && i);
+        buf[33] = 0;
+        return (char*)(buf + i);
+    } break;
+    case 10:
+    {
+        char numerals[10] = "0123456789";
+        int i = 11;
+        static char buf[11];
+        do
+        {
+            i--;
+            buf[i] = numerals[n % 10];
+        } while ((n /= 10) > 0 && i);
+        buf[11] = 0;
+        return (char*)(buf + i);
+    } break;
+    case 16:
+    {
+        char numerals[16] = "0123456789ABCDEF";
+        int i = 9;
+        static char buf[9];
+        do
+        {
+            i--;
+            buf[i] = numerals[n % 16];
+        } while ((n /= 16) > 0 && i);
+        buf[9] = 0;
+        return (char*)(buf + i);
+    } break;
+    }
+    return NULL;
+}

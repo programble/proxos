@@ -2,6 +2,7 @@ ENTRY (loader)
 phys = 0x00100000;
 SECTIONS
 {
+  . = phys;
   link_kernel_entry = phys;
   .text phys : AT(phys) {
     code = .;
@@ -22,5 +23,5 @@ SECTIONS
     . = ALIGN(4096);
   }
   end = .;
-  link_kernel_end = .;
+  link_kernel_end = end;
 }

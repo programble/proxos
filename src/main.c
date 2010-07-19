@@ -55,6 +55,15 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     puts(multiboot->cmdline);
     puts(")\n");
 
+    if (!link_kernel_end)
+        panic("Where the fuck does the kernel end?");
+
+    puts(":: Kernel starts at ");
+    puts(int_to_str((u32) link_kernel_entry, 16));
+    puts(" and ends at ");
+    puts(int_to_str((u32) link_kernel_end, 16));
+    puts("\n");
+
     puts(":: ");
     set_text_color_foreground(white);
     puts("Proxos ");
