@@ -12,7 +12,6 @@ To build Proxos, you will need:
  * clang (or other compatible C compiler, such as GCC)
  * ld (or other compatible linker)
  * mkiso/genisoimage
- * GNU GRUB Legacy
  * BASH
 
 To build Proxos with default settings, run
