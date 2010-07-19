@@ -49,7 +49,7 @@ function cc
 }
 
 # Assemble
-for FILE in src/*.s; do
+for FILE in src/*.asm; do
     OUTPUT=output/${FILE##*/}.o
     if [[ $FILE -nt $OUTPUT ]]; then
         asm $FILE $OUTPUT
