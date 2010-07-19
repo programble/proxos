@@ -19,7 +19,10 @@
 #ifndef __SYSTEM_H__
 #define __SYSTEM_H__
 
-#define panic(message) _panic(message, __FILE__, __LINE__)
+#define STRING(x) #x
+#define MACRO_STRING(x) STRING(x)
+
+#define panic(message) _panic(message, __FILE__, MACRO_STRING(__LINE__))
 
 typedef unsigned char u8;
 typedef signed char s8;

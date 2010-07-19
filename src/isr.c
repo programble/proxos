@@ -133,11 +133,6 @@ void fault_handler(struct regs *r)
 {
     if (r->int_no < 32)
     {
-        set_text_color_foreground(red);
-        puts("\n:: ");
-        puts(exception_messages[r->int_no]);
-        puts(" Exception. System Halted!\n");
-        /*for (;;);*/
-        halt();
+        panic(exception_messages[r->int_no]);
     }
 }

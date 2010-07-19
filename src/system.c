@@ -63,7 +63,7 @@ void halt()
     __asm__("cli; hlt;");
 }
 
-void _panic(char *message, char *file, int line)
+void _panic(char *message, char *file, char *line)
 {
     puts("\n");
     set_text_color_foreground(red);
@@ -77,7 +77,8 @@ void _panic(char *message, char *file, int line)
     puts(file);
     puts("\n Line: ");
     /* TODO: Print line number as string */
-    line = line; /* Blah */
+    /*line = line;*/ /* Blah */
+    puts(line);
     puts("\n");
     halt();
 }

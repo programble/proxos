@@ -53,6 +53,5 @@ void kmain(void* mbd, unsigned int magic)
     /* ISR Test */
     /*puts(":: Stand back! I am going to divide by zero!");
       putch(0x65 / 0);*/
-    /*for (;;);*/
-    panic("Test panic");
+    panic("Oh noes!");
 }
