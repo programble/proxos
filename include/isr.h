@@ -20,7 +20,7 @@
 #define __ISR_H__
 
 #include <idt.h>
-#include <text.h>
+#include <tty.h>
 
 struct regs
 {

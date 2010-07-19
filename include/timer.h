@@ -20,7 +20,7 @@
 #define __TIMER_H__
 
 #include <irq.h>
-#include <text.h>
+#include <tty.h>
 
 void timer_init();
 

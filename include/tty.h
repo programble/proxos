@@ -16,8 +16,8 @@
  *  along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TEXT_H__
-#define __TEXT_H__
+#ifndef __TTY_H__
+#define __TTY_H__
 
 #include <system.h>
 
@@ -44,7 +44,7 @@ typedef enum
     white         = 0xF
 } color;
 
-void text_init();
+void tty_init();
 void clear();
 void putch(u8);
 void puts(char*);

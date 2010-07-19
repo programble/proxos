@@ -16,7 +16,7 @@
  *  along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <text.h>
+#include <tty.h>
 
 u16 *vram;
 
@@ -28,7 +28,7 @@ int cursor_y;
 
 void move_cursor();
 
-void text_init()
+void tty_init()
 {
     /* Location of video RAM in memory */
     vram = (u16 *) 0xb8000;

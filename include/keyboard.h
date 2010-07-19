@@ -20,7 +20,7 @@
 #define __KEYBOARD_H__
 
 #include <system.h>
-#include <text.h>
+#include <tty.h>
 #include <irq.h>
 
 char *keymap;

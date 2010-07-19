@@ -17,7 +17,7 @@
  */
 
 #include <system.h>
-#include <text.h>
+#include <tty.h>
 #include <gdt.h>
 #include <idt.h>
 #include <isr.h>
@@ -38,7 +38,7 @@ void kmain(void* mbd, unsigned int magic)
     irq_init();
     __asm__ __volatile__ ("sti");
     
-    text_init();
+    tty_init();
     timer_init();
     keyboard_init();
 
@@ -53,5 +53,7 @@ void kmain(void* mbd, unsigned int magic)
     /* ISR Test */
     /*puts(":: Stand back! I am going to divide by zero!");
       putch(0x65 / 0);*/
-    panic("Oh noes!");
+    /*panic("Oh noes!");*/
+    while (true)
+        __asm__("hlt");
 }

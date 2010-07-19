@@ -33,6 +33,12 @@ typedef signed int s32;
 typedef unsigned long u64;
 typedef signed long s64;
 
+typedef enum
+{
+    false,
+    true
+} bool;
+
 u8 inportb(u16);
 void outportb (u16, u8);
 
@@ -46,6 +52,6 @@ void halt();
 
 void _panic();
 
-#include <text.h>
+#include <tty.h>
 
 #endif
