@@ -60,11 +60,20 @@ u16 *memsetw(u16 *dest, u16 val, int count)
 
 void halt()
 {
-    __asm__("cli; hlt;");
+    __asm__ __volatile__("cli");
+    __asm__ __volatile__("hlt");
 }
+
+u8 in_panic = 0;
 
 void _panic(char *message, char *file, char *line)
 {
+    if (in_panic)
+    {
+        /* Recursive panic, just halt */
+        halt();
+    }
+    in_panic = 1;
     puts("\n");
     set_text_color_foreground(red);
     puts(":: When in ");
@@ -76,8 +85,6 @@ void _panic(char *message, char *file, char *line)
     puts("\n File: ");
     puts(file);
     puts("\n Line: ");
-    /* TODO: Print line number as string */
-    /*line = line;*/ /* Blah */
     puts(line);
     puts("\n");
     halt();

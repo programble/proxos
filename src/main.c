@@ -60,7 +60,7 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     /* ISR Test */
     /*puts(":: Stand back! I am going to divide by zero!");
       putch(0x65 / 0);*/
-    /*panic("Oh noes!");*/
+    /*assert(false);*/
     /* Idle loop */
     while (true)
         __asm__("hlt");
