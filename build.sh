@@ -30,7 +30,7 @@ mkdir -p output
 
 function asm
 {
-    echo " [ ASM ] $1"
+    echo " [ ASM ] $1 -> $2"
     $ASM -f elf -o $2 $1
     if [ $? -ne 0 ]; then
         echo " [ ERROR ]"
@@ -40,7 +40,7 @@ function asm
 
 function cc
 {
-    echo " [ CC ] $1"
+    echo " [ CC ] $1 -> $2"
     $CC -std=c99 -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs -nostdinc -ffreestanding -fno-builtin -Iinclude/ -o $2 -c $1
     if [ $? -ne 0 ]; then
         echo " [ ERROR ]"
@@ -65,7 +65,7 @@ for FILE in src/*.c; do
 done
 
 # Link the kernel
-echo " [ LD ] build/linker.ld"
+echo " [ LD ] build/linker.ld -> output/kernel.bin"
 $LD -T build/linker.ld -o output/kernel.bin output/*.o
 if [ $? -ne 0 ]; then
     echo " [ ERROR ]"
@@ -78,7 +78,7 @@ cp $STAGE2 output/iso/boot/grub/
 cp build/menu.lst output/iso/boot/grub/
 cp output/kernel.bin output/iso/boot/
 
-echo " [ ISO ] proxos.iso"
+echo " [ ISO ] output/iso/ -> proxos.iso"
 $MKISO -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o proxos.iso output/iso/ 2> /dev/null
 if [ $? -ne 0 ]; then
     echo " [ ERROR ]"
