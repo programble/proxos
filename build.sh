@@ -66,7 +66,7 @@ done
 
 # Link the kernel
 echo " [ LD ] build/linker.ld -> output/kernel.bin"
-$LD -T build/linker.ld -o output/kernel.bin output/*.o
+$LD -T build/linker.ld -o output/kernel.elf output/*.o
 if [ $? -ne 0 ]; then
     echo " [ ERROR ]"
     exit
@@ -84,7 +84,7 @@ if [[ build/menu.lst -nt output/iso/boot/grub/menu.lst ]]; then
     cp build/menu.lst output/iso/boot/grub/
 fi
 echo " [ CP ] output/kernel.bin -> output/iso/boot/kernel.bin"
-cp output/kernel.bin output/iso/boot/
+cp output/kernel.elf output/iso/boot/
 
 echo " [ ISO ] output/iso/ -> proxos.iso"
 $MKISO -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o proxos.iso output/iso/ 2> /dev/null

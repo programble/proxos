@@ -2,7 +2,7 @@ default 0
 timeout 3
  
 title Proxos
-kernel /boot/kernel.bin
+kernel /boot/kernel.elf
 
 title Boot from first hard disk
 chainloader (hd0)+1
