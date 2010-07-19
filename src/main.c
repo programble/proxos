@@ -24,6 +24,7 @@
 #include <irq.h>
 #include <timer.h>
 #include <keyboard.h>
+#include <mm.h>
 
 void kmain(multiboot_header *multiboot, unsigned int magic)
 {
@@ -41,6 +42,7 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     tty_init();
     timer_init();
     keyboard_init();
+    mm_init(multiboot);
 
     puts("\n:: Booted with ");
     puts(multiboot->boot_loader_name);
@@ -63,6 +65,24 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     puts(" (Compiled ");
     puts(COMPILED);
     puts(")\n");
+
+    struct foo
+    {
+        u32 bar;
+        u32 baz;
+    };
+    struct bar
+    {
+        u64 baz;
+        u64 foo;
+    };
+
+    malloc(sizeof(struct foo));
+    malloc(sizeof(struct bar));
+    malloc(sizeof(struct foo));
+    malloc(sizeof(struct bar));
+        
+    coredump();
 
     /* Idle loop */
     while (true)
