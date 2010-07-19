@@ -19,6 +19,8 @@
 #ifndef __SYSTEM_H__
 #define __SYSTEM_H__
 
+#define panic(message) _panic(message, __FILE__, __LINE__)
+
 typedef unsigned char u8;
 typedef signed char s8;
 typedef unsigned short u16;
@@ -38,5 +40,9 @@ u8 *memset(u8*, u8, int);
 u16 *memsetw(u16*, u16, int);
 
 void halt();
+
+void _panic();
+
+#include <text.h>
 
 #endif

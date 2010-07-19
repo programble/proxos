@@ -20,7 +20,7 @@
 #include <text.h>
 #include <gdt.h>
 #include <idt.h>
-#include <isrs.h>
+#include <isr.h>
 #include <irq.h>
 #include <timer.h>
 #include <keyboard.h>
@@ -29,12 +29,12 @@ void kmain(void* mbd, unsigned int magic)
 {
     if (magic != 0x2BADB002)
     {
-        for (;;);
+        halt();
     }
 
     gdt_init();
     idt_init();
-    isrs_init();
+    isr_init();
     irq_init();
     __asm__ __volatile__ ("sti");
     
@@ -53,5 +53,6 @@ void kmain(void* mbd, unsigned int magic)
     /* ISR Test */
     /*puts(":: Stand back! I am going to divide by zero!");
       putch(0x65 / 0);*/
-    for (;;);
+    /*for (;;);*/
+    panic("Test panic");
 }

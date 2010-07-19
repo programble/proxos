@@ -62,3 +62,22 @@ void halt()
 {
     __asm__("cli; hlt;");
 }
+
+void _panic(char *message, char *file, int line)
+{
+    puts("\n");
+    set_text_color_foreground(red);
+    puts(":: When in ");
+    set_text_color_foreground(light_red);
+    puts("panic");
+    set_text_color_foreground(red);
+    puts(", fear or doubt, run in circles, scream and shout\n ");
+    puts(message);
+    puts("\n File: ");
+    puts(file);
+    puts("\n Line: ");
+    /* TODO: Print line number as string */
+    line = line; /* Blah */
+    puts("\n");
+    halt();
+}
