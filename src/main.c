@@ -29,7 +29,7 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
 {
     if (magic != 0x2BADB002)
     {
-        halt();
+        panic("Bad multiboot magic");
     }
 
     gdt_init();
@@ -49,9 +49,9 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     puts(")\n");
 
     puts(":: Kernel starts at 0x");
-    puts(int_to_str((u32) link_kernel_entry, 16));
+    puts(int_to_str((u32) &link_kernel_entry, 16));
     puts(" and ends at 0x");
-    puts(int_to_str((u32) link_kernel_end, 16));
+    puts(int_to_str((u32) &link_kernel_end, 16));
     puts("\n");
 
     puts(":: ");

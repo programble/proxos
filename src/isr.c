@@ -132,7 +132,5 @@ char *exception_messages[] =
 void fault_handler(struct regs *r)
 {
     if (r->int_no < 32)
-    {
         panic(exception_messages[r->int_no]);
-    }
 }
