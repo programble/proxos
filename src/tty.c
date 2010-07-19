@@ -51,6 +51,7 @@ void tty_init()
 
 void clear()
 {
+    assert(vram);
     u32 blank;
 
     u16 attrib = (background << 4) | (foreground & 0x0F);
@@ -68,6 +69,7 @@ void clear()
 
 void scroll()
 {
+    assert(vram);
     u32 blank;
     u32 temp;
 
@@ -89,6 +91,7 @@ void scroll()
 
 void putch(u8 c)
 {
+    assert(vram);
     /* Backspace */
     if (c == 0x08)
     {
