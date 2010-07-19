@@ -39,11 +39,11 @@ void tty_init()
     clear();
     /* Print out status */
     puts(":: Text-mode ");
-    set_text_color_foreground(red);
+    set_text_color_foreground(light_red);
     puts("V");
-    set_text_color_foreground(green);
+    set_text_color_foreground(light_green);
     puts("G");
-    set_text_color_foreground(blue);
+    set_text_color_foreground(light_blue);
     puts("A");
     set_text_color_foreground(light_gray);
     puts(" initialized\n");

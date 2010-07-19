@@ -22,6 +22,9 @@
 #define STRING(x) #x
 #define MACRO_STRING(x) STRING(x)
 
+#define VERSION "0.1.0"
+#define COMPILED __DATE__
+
 #define panic(message) _panic(message, __FILE__, MACRO_STRING(__LINE__))
 #define assert(value) if (!(value)) _panic("Assert failed", __FILE__, MACRO_STRING(__LINE__))
 

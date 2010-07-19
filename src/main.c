@@ -50,11 +50,19 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     set_text_color_foreground(light_gray);
     puts("\n");*/
     puts(":: Booted with ");
-    set_text_color_foreground(white);
     puts(multiboot->boot_loader_name);
-    set_text_color_foreground(light_gray);
     puts(" (");
     puts(multiboot->cmdline);
+    puts(")\n");
+
+    puts(":: ");
+    set_text_color_foreground(white);
+    puts("Proxos ");
+    puts(VERSION);
+    puts(" booted");
+    set_text_color_foreground(light_gray);
+    puts(" (Compiled ");
+    puts(COMPILED);
     puts(")\n");
 
     /* ISR Test */
