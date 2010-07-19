@@ -16,7 +16,7 @@
  *  along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <isrs.h>
+#include <isr.h>
 
 extern void isr0();
 extern void isr1();
@@ -51,7 +51,7 @@ extern void isr29();
 extern void isr30();
 extern void isr31();
 
-void isrs_init()
+void isr_init()
 {
     idt_set_gate(0, (unsigned)isr0, 0x08, 0x8E);
     idt_set_gate(1, (unsigned)isr1, 0x08, 0x8E);

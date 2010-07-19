@@ -16,8 +16,8 @@
  *  along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __ISRS_H__
-#define __ISRS_H__
+#ifndef __ISR_H__
+#define __ISR_H__
 
 #include <idt.h>
 #include <text.h>
@@ -30,6 +30,6 @@ struct regs
     unsigned int eip, cs, eflags, useresp, ss;
 };
 
-void isrs_init();
+void isr_init();
 
 #endif
