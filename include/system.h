@@ -23,6 +23,9 @@
 #define MACRO_STRING(x) STRING(x)
 
 #define panic(message) _panic(message, __FILE__, MACRO_STRING(__LINE__))
+#define assert(value) if (!(value)) _panic("Assert failed", __FILE__, MACRO_STRING(__LINE__))
+
+#define NULL ((void*)0)
 
 typedef unsigned char u8;
 typedef signed char s8;
@@ -51,6 +54,49 @@ u16 *memsetw(u16*, u16, int);
 void halt();
 
 void _panic();
+
+typedef struct
+{
+    u32 size;
+    u32 base_addr;
+    u32 base_addr_high;
+    u32 length;
+    u32 length_high;
+    u32 type;
+} mmap_field;
+
+/* Multiboot header */
+typedef struct
+{
+    u32 flags;
+    u32 mem_lower;
+    u32 mem_upper;
+    u32 boot_device;
+    char *cmdline;
+    u32 mods_count;
+    u32 *mods_addr;
+    u32 syms[4];
+    u32 mmap_length;
+    mmap_field *mmap_addr;
+    u32 drives_length;
+    u32 *drives_addr;
+    u32 config_table;
+    char *boot_loader_name;
+    u32 apm_table;
+    u32 vbe_control_info;
+    u32 vbe_mode_info;
+    u16 vbe_mode;
+    u16 vbe_interface_seg;
+    u16 vbe_interface_off;
+    u16 vbe_interface_len;
+    u64 framebuffer_addr;
+    u32 framebuffer_pitch;
+    u32 framebuffer_width;
+    u32 framebuffer_height;
+    u8 framebuffer_bpp;
+    u8 framebuffer_type;
+    u8 color_info[6];
+} multiboot_header;
 
 #include <tty.h>
 

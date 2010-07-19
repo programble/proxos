@@ -25,7 +25,7 @@
 #include <timer.h>
 #include <keyboard.h>
 
-void kmain(void* mbd, unsigned int magic)
+void kmain(multiboot_header *multiboot, unsigned int magic)
 {
     if (magic != 0x2BADB002)
     {
@@ -43,17 +43,25 @@ void kmain(void* mbd, unsigned int magic)
     keyboard_init();
 
     /* Just for kicks */
-    char *boot_loader_name = (char*) ((long*) mbd)[16];
+    /*char *boot_loader_name = (char*) ((long*) mbd)[16];
     puts(":: Booted with ");
     set_text_color_foreground(white);
     puts(boot_loader_name);
     set_text_color_foreground(light_gray);
-    puts("\n");
+    puts("\n");*/
+    puts(":: Booted with ");
+    set_text_color_foreground(white);
+    puts(multiboot->boot_loader_name);
+    set_text_color_foreground(light_gray);
+    puts(" (");
+    puts(multiboot->cmdline);
+    puts(")\n");
 
     /* ISR Test */
     /*puts(":: Stand back! I am going to divide by zero!");
       putch(0x65 / 0);*/
     /*panic("Oh noes!");*/
+    /* Idle loop */
     while (true)
         __asm__("hlt");
 }
