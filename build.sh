@@ -48,10 +48,13 @@ function cc
     fi
 }
 
-# Build loader
-if [[ src/loader.s -nt output/loader.s.o ]]; then
-    asm src/loader.s output/loader.s.o
-fi
+# Assemble
+for FILE in src/*.s; do
+    OUTPUT=output/${FILE##*/}.o
+    if [[ $FILE -nt $OUTPUT ]]; then
+        asm $FILE $OUTPUT
+    fi
+done
 
 # Build C sources
 for FILE in src/*.c; do
@@ -62,7 +65,7 @@ for FILE in src/*.c; do
 done
 
 # Link the kernel
-echo " [ LD ] output/kernel.bin"
+echo " [ LD ] build/linker.ld"
 $LD -T build/linker.ld -o output/kernel.bin output/*.o
 if [ $? -ne 0 ]; then
     echo " [ ERROR ]"
