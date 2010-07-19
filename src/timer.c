@@ -18,8 +18,6 @@
 
 #include <timer.h>
 
-int timer_ticks = 0;
-
 void timer_handler(struct regs *r)
 {
     /* To get gcc to shut the fuck up about unused parameter */
@@ -42,9 +40,14 @@ void timer_phase(int hz)
 
 void timer_init()
 {
+    puts(":: Initializing system timer\n");
+    puts("  > Setting tick counter\n");
+    /* Set ticks to 0 */
+    timer_ticks = 0;
+    puts("  > Setting interrupt frequency\n");
     /* Set frequency to 100 */
     timer_phase(100);
+    puts("  > Installing IRQ handler\n");
     /* Install handler */
     irq_install_handler(0, timer_handler);
-    puts(":: System timer initialized\n");
 }

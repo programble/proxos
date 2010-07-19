@@ -141,12 +141,13 @@ void keyboard_handler(struct regs *r)
 
 void keyboard_init()
 {
+    puts(":: Initializing keyboard driver\n");
+    puts("  > Setting shift flags\n");
     left_shift = 0;
     right_shift = 0;
+    puts("  > Using US keymap\n");
     keymap = keymap_us;
     keymap_shift = keymap_us_shift;
-    puts(":: Using US keymap\n");
-
+    puts("  > Installing IRQ handler\n");
     irq_install_handler(1, keyboard_handler);
-    puts(":: Keyboard driver initialized\n");
 }

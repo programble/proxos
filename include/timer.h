@@ -22,6 +22,8 @@
 #include <irq.h>
 #include <tty.h>
 
+u64 timer_ticks;
+
 void timer_init();
 
 #endif

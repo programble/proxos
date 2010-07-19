@@ -49,18 +49,18 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     puts(boot_loader_name);
     set_text_color_foreground(light_gray);
     puts("\n");*/
-    puts(":: Booted with ");
+    puts("\n:: Booted with ");
     puts(multiboot->boot_loader_name);
     puts(" (");
     puts(multiboot->cmdline);
     puts(")\n");
 
-    if (!link_kernel_end)
-        panic("Where the fuck does the kernel end?");
+    /*if (!link_kernel_end)
+      panic("Where the fuck does the kernel end?");*/
 
-    puts(":: Kernel starts at ");
+    puts(":: Kernel starts at 0x");
     puts(int_to_str((u32) link_kernel_entry, 16));
-    puts(" and ends at ");
+    puts(" and ends at 0x");
     puts(int_to_str((u32) link_kernel_end, 16));
     puts("\n");
 
@@ -80,5 +80,7 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     /*assert(false);*/
     /* Idle loop */
     while (true)
-        __asm__("hlt");
+    {
+        __asm__ __volatile__("hlt");
+    }
 }
