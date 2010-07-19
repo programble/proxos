@@ -26,7 +26,7 @@
 #define COMPILED __DATE__
 
 #define panic(message) _panic(message, __FILE__, MACRO_STRING(__LINE__))
-#define assert(value) if (!(value)) _panic("Assert failed", __FILE__, MACRO_STRING(__LINE__))
+#define assert(value) if (!(value)) _panic("Assert failed: " #value, __FILE__, MACRO_STRING(__LINE__))
 
 #define NULL ((void*)0)
 
