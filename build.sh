@@ -74,8 +74,15 @@ fi
 
 # Build ISO
 mkdir -p output/iso/boot/grub
-cp $STAGE2 output/iso/boot/grub/
-cp build/menu.lst output/iso/boot/grub/
+if [ ! -f output/iso/boot/grub/stage2_eltorito ]; then
+    echo " [ CP ] $STAGE2 -> output/iso/boot/grub/stage2_eltorito"
+    cp $STAGE2 output/iso/boot/grub/
+fi
+if [[ build/menu.lst -nt output/iso/boot/grub/menu.lst ]]; then
+    echo " [ CP ] build/menu.lst -> output/iso/boot/grub/menu.lst"
+    cp build/menu.lst output/iso/boot/grub/
+fi
+echo " [ CP ] output/kernel.bin -> output/iso/boot/kernel.bin"
 cp output/kernel.bin output/iso/boot/
 
 echo " [ ISO ] output/iso/ -> proxos.iso"
