@@ -16,8 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
 
-echo " [ RM ] output/*"
-rm -rf output/*
+for FILE in output/*; do
+    echo " [ RM ] $FILE"
+    rm -rf $FILE
+done
 
 echo " [ RM ] proxos.iso"
 rm -f proxos.iso
