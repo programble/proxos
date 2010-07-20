@@ -277,3 +277,13 @@ void free(void *memory)
 
     __asm__("sti");
 }
+
+void *realloc(void *old, u32 size)
+{
+    __asm__("cli");
+    void *new = malloc(size);
+    memcpy(new, old, size);
+    free(old);
+    __asm__("sti");
+    return new;
+}

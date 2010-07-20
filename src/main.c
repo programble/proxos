@@ -78,6 +78,13 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     free(baz);
     coredump();*/
 
+    void *foo = malloc(4);
+    *((u32*) foo) = 42;
+    coredump();
+    foo = realloc(foo, 8);
+    coredump();
+    assert(*((u32*) foo) == 42);
+
     /* Idle loop */
     while (true)
     {
