@@ -66,22 +66,16 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     puts(COMPILED);
     puts(")\n");
 
-    struct foo
-    {
-        u32 bar;
-        u32 baz;
-    };
-    struct bar
-    {
-        u64 baz;
-        u64 foo;
-    };
+    coredump();
 
-    malloc(sizeof(struct foo));
-    malloc(sizeof(struct bar));
-    malloc(sizeof(struct foo));
-    malloc(sizeof(struct bar));
-        
+    void *foo = malloc(8);
+    void *bar = malloc(4);
+    void *baz = malloc(16);
+    free(bar);
+    coredump();
+    free(foo);
+    coredump();
+    free(baz);
     coredump();
 
     /* Idle loop */

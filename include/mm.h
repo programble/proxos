@@ -32,6 +32,7 @@ typedef struct memory_header
 
 void mm_init(multiboot_header*);
 void *malloc(u32 size);
+void free(void*);
 void coredump();
 
 #endif

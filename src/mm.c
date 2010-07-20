@@ -203,3 +203,59 @@ void *malloc(u32 size)
     panic("Execution should never reach this point");
     return NULL;
 }
+
+void merge(memory_header *a, memory_header *b)
+{
+    a->size += b->size + sizeof(memory_header);
+    a->next = b->next;
+}
+
+void free(void *memory)
+{
+    /* Ignore freeing NULL */
+    if (!memory)
+        return;
+
+    /* Make sure MM is installed */
+    assert(mm_installed);
+
+    /* NO INTERRUPTIONS */
+    __asm__("cli");
+
+    memory_header *header = (memory_header*) (memory - sizeof(memory_header));
+
+    assert(header->magic == MM_MAGIC);
+
+    header->free = true;
+
+    /* Merge contiguous blocks (sweep) */
+    memory_header *block = first_block;
+    while (block)
+    {
+        /* Only merge free blocks */
+        if (!block->free)
+        {
+            block = block->next;
+            continue;
+        }
+        
+        /* After */
+        if ((memory_header*) (header->start + header->size) == block)
+        {
+            merge(header, block);
+            block = first_block;
+            continue;
+        }
+        /* Before */
+        else if ((memory_header*) (block->start + block->size) == header)
+        {
+            merge(block, header);
+            header = block;
+            block = first_block;
+            continue;
+        }
+        block = block->next;
+    }
+
+    __asm__("sti");
+}
