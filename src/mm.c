@@ -18,7 +18,7 @@
 
 #include <mm.h>
 
-#define MM_MAGIC (0x1AF909)
+#define MM_MAGIC (0xE1AFE909)
 
 memory_header *first_block = NULL;
 
@@ -80,7 +80,7 @@ void mm_init(multiboot_header *multiboot)
     }
     puts("  > 0x");
     puts(int_to_str(free_count(), 16));
-    puts(" bytes free");
+    puts(" bytes free\n");
     mm_installed = true;
 }
 
