@@ -85,7 +85,6 @@ void mm_init(multiboot_header *multiboot)
 }
 
 memory_header *previous_free_block;
-
 void add_free_block(u32 base, u32 length)
 {
     /* Nothing before 0x100000 */
@@ -126,14 +125,18 @@ void add_free_block(u32 base, u32 length)
 void coredump()
 {
     puts("\n");
-    puts("BLOCK\tSTART\t\tSIZE\n");
-    puts("---------------------------------\n");
+    puts("BLOCK\tHEADER\t\tSTART\t\tEND\t\tSIZE\n");
+    puts("-----------------------------------------------------------------\n");
     memory_header *block = first_block;
     while (block)
     {
         puts(block->free ? "FREE" : "USED");
         puts("\t0x");
+        puts(int_to_str((u32) block, 16));
+        puts("\t0x");
         puts(int_to_str(block->start, 16));
+        puts("\t0x");
+        puts(int_to_str(block->start + block->size, 16));
         puts("\t0x");
         puts(int_to_str(block->size, 16));
         puts("\n");
@@ -184,27 +187,27 @@ void *malloc(u32 size)
         }
 
         /* Block is just right */
-        if (block->size >= size && block->size + sizeof(memory_header) <= size)
+        if (block->size == size)
         {
             block->free = false;
             __asm__("sti");
             return (void*) block->start;
         }
-        /* Block is big enough */
+        /* Block is bigger */
         else if (block->size > size)
         {
             /* Split block */
 
             /* Leftover block */
             memory_header *new_block = (memory_header*) (block->start + size);
-            new_block->size = block->size - size - sizeof(memory_header);
+            new_block->size = block->size - size/* - sizeof(memory_header)*/;
             new_block->start = (u32) new_block + sizeof(memory_header);
             new_block->free = true;
             new_block->magic = MM_MAGIC;
             new_block->next = block->next;
             block->next = new_block;
 
-            assert(new_block->size + size + sizeof(memory_header) == block->size);
+            assert(new_block->size + size /*+ sizeof(memory_header)*/ == block->size);
 
             /* Shorten current block */
             block->size = size;
@@ -222,10 +225,30 @@ void *malloc(u32 size)
     return NULL;
 }
 
-void merge(memory_header *a, memory_header *b)
+void merge_sweep()
 {
-    a->size += b->size + sizeof(memory_header);
-    a->next = b->next;
+    /* Sweep through headers, merging all mergable blocks */
+    memory_header *block = first_block;
+    while (block && block->next)
+    {
+        if (!block->free)
+        {
+            block = block->next;
+            continue;
+        }
+
+        assert(block->magic == MM_MAGIC);
+        assert(block->next->magic == MM_MAGIC);
+
+        if (block->next->free)
+        {
+            /* nom nom */
+            block->size += block->next->size + sizeof(memory_header);
+            block->next = block->next->next;
+        }
+
+        block = block->next;
+    }
 }
 
 void free(void *memory)
@@ -247,33 +270,7 @@ void free(void *memory)
     header->free = true;
 
     /* Merge contiguous blocks (sweep) */
-    memory_header *block = first_block;
-    while (block)
-    {
-        /* Only merge free blocks */
-        if (!block->free)
-        {
-            block = block->next;
-            continue;
-        }
-        
-        /* After */
-        if ((memory_header*) (header->start + header->size) == block)
-        {
-            merge(header, block);
-            block = first_block;
-            continue;
-        }
-        /* Before */
-        else if ((memory_header*) (block->start + block->size) == header)
-        {
-            merge(block, header);
-            header = block;
-            block = first_block;
-            continue;
-        }
-        block = block->next;
-    }
+    merge_sweep();
 
     __asm__("sti");
 }
@@ -282,7 +279,6 @@ void *realloc(void *old, u32 size)
 {
     __asm__("cli");
     void *new = malloc(size);
-    memcpy(new, old, size);
     free(old);
     __asm__("sti");
     return new;

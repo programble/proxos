@@ -78,16 +78,27 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     free(baz);
     coredump();*/
 
-    char *foo = malloc(1);
+#define _(x) puts(#x); x
+
+    _(char *foo = malloc(1));
     coredump();
-    foo = realloc(foo, 2);
+    _(foo = realloc(foo, 2));
     coredump();
-    char *bar = malloc(3);
+    _(char *bar = malloc(3));
     coredump();
-    foo = realloc(foo, 3);
+    _(foo = realloc(foo, 3));
     coredump();
-    bar = realloc(bar, 4);
+    _(bar = realloc(bar, 4));
     coredump();
+
+    /*_(char *foo = malloc(3));
+    coredump();
+    _(malloc(5));
+    coredump();
+    _(free(foo));
+    coredump();
+    _(foo = malloc(3));
+    coredump();*/
 
     /* Idle loop */
     while (true)
