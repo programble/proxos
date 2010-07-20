@@ -34,5 +34,6 @@ void mm_init(multiboot_header*);
 void *malloc(u32 size);
 void free(void*);
 void coredump();
+u32 free_count();
 
 #endif

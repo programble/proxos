@@ -78,6 +78,9 @@ void mm_init(multiboot_header *multiboot)
         }
         mmap = (mmap_field*) ((unsigned long) mmap + mmap->size + sizeof(mmap->size));
     }
+    puts("  > 0x");
+    puts(int_to_str(free_count(), 16));
+    puts(" bytes free");
     mm_installed = true;
 }
 
@@ -136,6 +139,21 @@ void coredump()
         puts("\n");
         block = block->next;
     }
+}
+
+u32 free_count()
+{
+    u32 count = 0;
+    memory_header *block = first_block;
+    while (block)
+    {
+        if (block->free)
+        {
+            count += block->size;
+        }
+        block = block->next;
+    }
+    return count;
 }
 
 void *malloc(u32 size)

@@ -68,7 +68,7 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
 
     coredump();
 
-    void *foo = malloc(8);
+    /*void *foo = malloc(8);
     void *bar = malloc(4);
     void *baz = malloc(16);
     free(bar);
@@ -76,7 +76,7 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     free(foo);
     coredump();
     free(baz);
-    coredump();
+    coredump();*/
 
     /* Idle loop */
     while (true)
