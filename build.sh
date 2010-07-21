@@ -22,6 +22,9 @@
 [ $LD ] || LD=ld
 [ $MKISO ] || MKISO=genisoimage
 [ $STAGE2 ] || STAGE2=build/stage2_eltorito
+[ $BOOTLOADER ] || BOOTLOADER=grub
+[ $ISOLINUXBIN ] || ISOLINUXBIN=/usr/lib/syslinux/isolinux.bin
+[ $MBOOTC32 ] || MBOOTC32=/usr/lib/syslinux/mboot.c32
 
 # Ensure the output directory exists
 mkdir -p output
@@ -65,7 +68,7 @@ for FILE in src/*.c; do
 done
 
 # Link the kernel
-echo " [ LD ] build/linker.ld -> output/kernel.bin"
+echo " [ LD ] build/linker.ld -> output/kernel.elf"
 $LD -melf_i386 -T build/linker.ld -o output/kernel.elf output/*.o
 if [ $? -ne 0 ]; then
     echo " [ ERROR ]"
@@ -73,22 +76,52 @@ if [ $? -ne 0 ]; then
 fi
 
 # Build ISO
-mkdir -p output/iso/boot/grub
+mkdir -p output/iso/boot
 
-if [ ! -f output/iso/boot/grub/stage2_eltorito ]; then
-    echo " [ CP ] $STAGE2 -> output/iso/boot/grub/stage2_eltorito"
-    cp $STAGE2 output/iso/boot/grub/
-fi
-if [[ build/menu.lst -nt output/iso/boot/grub/menu.lst ]]; then
-    echo " [ CP ] build/menu.lst -> output/iso/boot/grub/menu.lst"
-    cp build/menu.lst output/iso/boot/grub/
-fi
-echo " [ CP ] output/kernel.bin -> output/iso/boot/kernel.bin"
+echo " [ CP ] output/kernel.elf -> output/iso/boot/kernel.elf"
 cp output/kernel.elf output/iso/boot/
 
+case "$BOOTLOADER" in
+    "grub")
+        mkdir -p output/iso/boot/grub
+        if [ ! -f output/iso/boot/grub/stage2_eltorito ]; then
+            echo " [ CP ] $STAGE2 -> output/iso/boot/grub/stage2_eltorito"
+            cp $STAGE2 output/iso/boot/grub/
+        fi
+        if [[ build/menu.lst -nt output/iso/boot/grub/menu.lst ]]; then
+            echo " [ CP ] build/menu.lst -> output/iso/boot/grub/menu.lst"
+            cp build/menu.lst output/iso/boot/grub/
+        fi
+        BOOTFILE=boot/grub/stage2_eltorito
+    ;;
+    "isolinux")
+        mkdir -p output/iso/boot/isolinux
+        if [ ! -f output/iso/boot/isolinux/isolinux.bin ]; then
+            echo " [ CP ] $ISOLINUXBIN -> output/iso/boot/isolinux/isolinux.bin"
+            cp $ISOLINUXBIN output/iso/boot/isolinux/
+        fi
+        if [ ! -f output/iso/boot/isolinux/mboot.c32 ]; then
+            echo " [ CP ] $MBOOTC32 -> output/iso/boot/isolinux/mboot.c32"
+            cp $MBOOTC32 output/iso/boot/isolinux/
+        fi
+        if [[ build/isolinux.cfg -nt output/iso/boot/isolinux/isolinux.cfg ]]; then
+            echo " [ CP ] build/isolinux.cfg -> output/iso/boot/isolinux/isolinux.cfg"
+            cp build/isolinux.cfg output/iso/boot/isolinux/
+        fi
+        BOOTFILE=boot/isolinux/isolinux.bin
+    ;;
+esac
+
+
 echo " [ ISO ] output/iso/ -> proxos.iso"
-$MKISO -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o proxos.iso output/iso/ 2> /dev/null
+$MKISO -R -b $BOOTFILE -no-emul-boot -boot-load-size 4 -boot-info-table -o proxos.iso output/iso/ 2> /dev/null
 if [ $? -ne 0 ]; then
     echo " [ ERROR ]"
     exit
+fi
+
+# Apply isohybrid to allow for USB booting
+if [[ $BOOTLOADER == "isolinux" ]]; then
+    echo " [ ISOHYBRID ] proxos.iso -> proxos.iso"
+    isohybrid proxos.iso
 fi
