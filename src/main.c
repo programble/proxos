@@ -77,6 +77,10 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
             puts(int_to_str(timer_ticks, 10));
             puts("\n");
         }
+        else if (strcmp(input, "halt") == 0)
+        {
+            halt();
+        }
         free(input);
     }
     
