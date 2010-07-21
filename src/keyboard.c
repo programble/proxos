@@ -196,7 +196,8 @@ void keyboard_init()
 char getch()
 {
     /* Wait for a character */
-    while (!kbuffer_first);
+    while (!kbuffer_first)
+        __asm__("hlt");
 
     return kbuffer_dequeue();
 }
@@ -213,7 +214,13 @@ char *gets()
             data[i] = 0x0;
             break;
         }
-        if (i == length)
+        if (temp == '\b')
+        {
+            i--;
+            i--;
+            continue;
+        }
+        if (i >= length)
         {
             length += 16;
             data = realloc(data, length);

@@ -72,10 +72,10 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
             headerdump();
         else if (strcmp(input, "panic") == 0)
             panic("Yes, my master");
-        else if (strcmp(input, "leak") == 0)
+        else if (strcmp(input, "ticks") == 0)
         {
-            char *foo = malloc(16);
-            foo = realloc(foo, 16 * 2);
+            puts(int_to_str(timer_ticks, 10));
+            puts("\n");
         }
         free(input);
     }
