@@ -227,27 +227,19 @@ void *malloc(u32 size)
 
 void merge_sweep()
 {
-    /* Sweep through headers, merging all mergable blocks */
-    memory_header *block = first_block;
-    while (block && block->next)
+    for (memory_header *block = first_block; block; block = block->next)
     {
-        if (!block->free)
-        {
-            block = block->next;
-            continue;
-        }
-
         assert(block->magic == MM_MAGIC);
-        assert(block->next->magic == MM_MAGIC);
-
+        if (block->free == false)
+            continue; /* Skip used blocks */
+        if (!block->next)
+            break; /* There are no more blocks */
         if (block->next->free)
         {
-            /* nom nom */
-            block->size += (block->next->size + sizeof(memory_header));
+            /* Two free blocks beside eachother should merge */
+            block->size = block->size + block->next->size + sizeof(memory_header);
             block->next = block->next->next;
         }
-
-        block = block->next;
     }
 }
 
