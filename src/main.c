@@ -60,12 +60,26 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     puts(COMPILED);
     puts(")\n");
 
-    coredump();
-
-    char *foo = gets();
-    puts("You typed: ");
-    puts(foo);
-
+    /* Input loop */
+    puts("\n");
+    while (true)
+    {
+        puts(">");
+        char *input = gets();
+        if (strcmp(input, "coredump") == 0)
+            coredump();
+        else if (strcmp(input, "headerdump") == 0)
+            headerdump();
+        else if (strcmp(input, "panic") == 0)
+            panic("Yes, my master");
+        else if (strcmp(input, "leak") == 0)
+        {
+            char *foo = malloc(16);
+            foo = realloc(foo, 16 * 2);
+        }
+        free(input);
+    }
+    
     /* Idle loop */
     while (true)
     {

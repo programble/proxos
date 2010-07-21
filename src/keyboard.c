@@ -213,7 +213,7 @@ char *gets()
             data[i] = 0x0;
             break;
         }
-        if (i > length)
+        if (i == length)
         {
             length += 16;
             data = realloc(data, length);

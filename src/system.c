@@ -37,6 +37,14 @@ int strlen(char *str)
     return i;
 }
 
+int strcmp(char *s1, char *s2)
+{
+    for (; *s1 == *s2; s1++, s2++)
+        if (*s1 == 0x0)
+            return 0;
+    return *(u8*) s1 < *(u8*) s2 ? -1 : 1;
+}
+
 u8 *memcpy(u8 *dest, u8 *src, int count)
 {
     for (int i = 0; i < count; i++)

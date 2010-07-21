@@ -49,6 +49,7 @@ u8 inportb(u16);
 void outportb (u16, u8);
 
 int strlen(char*);
+int strcmp(char*, char*);
 
 u8 *memcpy(u8*, u8*, int);
 u8 *memset(u8*, u8, int);
