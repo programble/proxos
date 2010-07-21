@@ -106,6 +106,7 @@ char *int_to_str(u32, u32);
 extern void *link_kernel_entry;
 extern void *link_kernel_end;
 
+#include <mm.h>
 #include <tty.h>
 
 #endif

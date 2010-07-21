@@ -50,12 +50,6 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     puts(multiboot->cmdline);
     puts(")\n");
 
-    puts(":: Kernel starts at 0x");
-    puts(int_to_str((u32) &link_kernel_entry, 16));
-    puts(" and ends at 0x");
-    puts(int_to_str((u32) &link_kernel_end, 16));
-    puts("\n");
-
     puts(":: ");
     set_text_color_foreground(white);
     puts("Proxos ");
@@ -67,6 +61,10 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     puts(")\n");
 
     coredump();
+
+    char *foo = gets();
+    puts("You typed: ");
+    puts(foo);
 
     /* Idle loop */
     while (true)

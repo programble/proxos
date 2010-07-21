@@ -94,6 +94,44 @@ char keymap_us_shift[128] =
     0,
 };
 
+typedef struct kbuffer
+{
+    char data;
+    struct kbuffer *previous;
+} kbuffer;
+
+kbuffer *kbuffer_first;
+kbuffer *kbuffer_last;
+
+void kbuffer_enqueue(char data)
+{
+    kbuffer *new = malloc(sizeof(kbuffer));
+    new->data = data;
+    new->previous = NULL;
+    if (kbuffer_last)
+    {
+        kbuffer_last->previous = new;
+        kbuffer_last = new;
+    }
+    else
+    {
+        kbuffer_first = new;
+        kbuffer_last = new;
+    }
+}
+
+char kbuffer_dequeue()
+{
+    assert(kbuffer_first);
+    char data = kbuffer_first->data;
+    kbuffer *first = kbuffer_first;
+    kbuffer_first = first->previous;
+    if (kbuffer_last == first)
+        kbuffer_last = NULL;
+    free(first);
+    return data;
+}
+
 void keyboard_handler(struct regs *r)
 {
     /* STFU GCC */
@@ -131,10 +169,12 @@ void keyboard_handler(struct regs *r)
         if (left_shift || right_shift)
         {
             putch(keymap_shift[scancode]);
+            kbuffer_enqueue(keymap_shift[scancode]);
         }
         else
         {
             putch(keymap[scancode]);
+            kbuffer_enqueue(keymap[scancode]);
         }
     }
 }
@@ -142,12 +182,43 @@ void keyboard_handler(struct regs *r)
 void keyboard_init()
 {
     puts(":: Initializing keyboard driver\n");
-    puts("  > Setting shift flags\n");
     left_shift = 0;
     right_shift = 0;
+    kbuffer_first = NULL;
+    kbuffer_last = NULL;
     puts("  > Using US keymap\n");
     keymap = keymap_us;
     keymap_shift = keymap_us_shift;
     puts("  > Installing IRQ handler\n");
     irq_install_handler(1, keyboard_handler);
+}
+
+char getch()
+{
+    /* Wait for a character */
+    while (!kbuffer_first);
+
+    return kbuffer_dequeue();
+}
+
+char *gets()
+{
+    u32 length = 16;
+    char *data = malloc(length);
+    for (u32 i = 0;; i++)
+    {
+        char temp = getch();
+        if (temp == '\n')
+        {
+            data[i] = 0x0;
+            break;
+        }
+        if (i > length)
+        {
+            length += 16;
+            data = realloc(data, length);
+        }
+        data[i] = temp;
+    }
+    return data;
 }

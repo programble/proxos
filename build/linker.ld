@@ -1,27 +1,28 @@
 ENTRY (loader)
-phys = 0x00100000;
 SECTIONS
 {
-  . = phys;
-  link_kernel_entry = phys;
-  .text phys : AT(phys) {
-    code = .;
+  . = 0x00100000;
+  link_kernel_entry = .;
+  .mbheader : {
+    *(.mbheader)
+  }
+  .text :{
     *(.text)
+  }
+
+  .rodata ALIGN (0x1000) : {
     *(.rodata)
-    . = ALIGN(4096);
   }
-  .data : AT(phys + (data - code))
-  {
-    data = .;
+
+  .data ALIGN (0x1000) : {
     *(.data)
-    . = ALIGN(4096);
   }
-  .bss : AT(phys + (bss - code))
-  {
-    bss = .;
+
+  .bss : {
+    sbss = .;
+    *(COMMON)
     *(.bss)
-    . = ALIGN(4096);
+    ebss = .;
   }
-  end = .;
-  link_kernel_end = end;
+  link_kernel_end = .;
 }

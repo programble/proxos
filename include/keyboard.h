@@ -31,4 +31,7 @@ u8 right_shift;
 
 void keyboard_init();
 
+char getch();
+char* gets();
+
 #endif
