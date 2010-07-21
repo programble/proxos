@@ -201,10 +201,21 @@ void *malloc(u32 size)
     return NULL;
 }
 
+void collapse(memory_header *block)
+{
+    memory_header *next;
+    for (next = block->next; next && next->free; next = next->next)
+    {
+        block->size += next->size + sizeof(memory_header);
+    }
+    block->next = next->next;
+}
+
 void merge_sweep()
 {
     for (memory_header *block = first_block; block; block = block->next)
     {
+#if false        
         assert(block->magic == MM_MAGIC);
         if (block->free == false)
             continue; /* Skip used blocks */
@@ -212,10 +223,19 @@ void merge_sweep()
             break; /* There are no more blocks */
         if (block->next->free)
         {
+            assert(block->next->magic == MM_MAGIC);
             /* Two free blocks beside eachother should merge */
             block->size = block->size + block->next->size + sizeof(memory_header);
             block->next = block->next->next;
         }
+#endif
+        assert(block->magic == MM_MAGIC);
+        if (block->free == false)
+            continue; /* Skip used blocks */
+        if (!block->next)
+            break; /* There are no more blocks */
+        if (block->next->free)
+            collapse(block);
     }
 }
 
@@ -232,6 +252,7 @@ void free(void *memory)
     header->free = true;
 
     merge_sweep();
+    /*collapse(header);*/
 
     __asm__("sti");
 }
