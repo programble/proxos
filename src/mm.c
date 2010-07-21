@@ -221,23 +221,16 @@ void merge_sweep()
 
 void free(void *memory)
 {
-    /* Ignore freeing NULL */
-    if (!memory)
-        return;
-
-    /* Make sure MM is installed */
     assert(mm_installed);
 
-    /* NO INTERRUPTIONS */
     __asm__("cli");
 
     memory_header *header = (memory_header*) (memory - sizeof(memory_header));
-
     assert(header->magic == MM_MAGIC);
-
+    assert(header->start == (u32) memory);
+    assert(header->free == false);
     header->free = true;
 
-    /* Merge contiguous blocks (sweep) */
     merge_sweep();
 
     __asm__("sti");
