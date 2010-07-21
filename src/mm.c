@@ -161,67 +161,43 @@ u32 free_count()
 
 void *malloc(u32 size)
 {
-    /* Cannot malloc while MM is not installed */
     assert(mm_installed);
 
-    /* Disable interrupts to avoid being interrupted (duh) */
+    /* Disable interrupts */
     __asm__("cli");
 
-    /* Cannot malloc nothing */
     assert(size > 0);
 
-    memory_header *block = first_block;
-    while (true)
+    for (memory_header *block = first_block; block; block = block->next)
     {
-        if (!block)
-        {
-            panic("Out of memory");
-        }
         assert(block->magic == MM_MAGIC);
 
-        /* Skip over used blocks */
-        if (!block->free)
-        {
-            block = block->next;
+        if (block->free == false)
             continue;
-        }
 
-        /* Block is just right */
         if (block->size == size)
         {
             block->free = false;
             __asm__("sti");
             return (void*) block->start;
         }
-        /* Block is bigger */
         else if (block->size > size)
         {
-            /* Split block */
+            memory_header *leftover = (memory_header*) (block->start + size);
+            leftover->size = block->size - size - sizeof(memory_header);
+            leftover->start = block->start + size + sizeof(memory_header);
+            leftover->free = true;
+            leftover->magic = MM_MAGIC;
+            leftover->next = block->next;
 
-            /* Leftover block */
-            memory_header *new_block = (memory_header*) (block->start + size);
-            new_block->size = block->size - size/* - sizeof(memory_header)*/;
-            new_block->start = (u32) new_block + sizeof(memory_header);
-            new_block->free = true;
-            new_block->magic = MM_MAGIC;
-            new_block->next = block->next;
-            block->next = new_block;
-
-            assert(new_block->size + size /*+ sizeof(memory_header)*/ == block->size);
-
-            /* Shorten current block */
+            block->next = leftover;
             block->size = size;
             block->free = false;
             __asm__("sti");
             return (void*) block->start;
         }
-        /* Block is too small */
-        else
-        {
-            block = block->next;
-        }
     }
-    panic("Execution should never reach this point");
+    panic("Out of memory");
     return NULL;
 }
 
