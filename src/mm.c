@@ -243,7 +243,7 @@ void merge_sweep()
         if (block->next->free)
         {
             /* nom nom */
-            block->size += block->next->size + sizeof(memory_header);
+            block->size += (block->next->size + sizeof(memory_header));
             block->next = block->next->next;
         }
 
@@ -279,6 +279,9 @@ void *realloc(void *old, u32 size)
 {
     __asm__("cli");
     void *new = malloc(size);
+    memory_header *header = (memory_header*) (old - sizeof(memory_header));
+    assert(header->magic == MM_MAGIC);
+    memcpy(new, old, header->size);
     free(old);
     __asm__("sti");
     return new;
