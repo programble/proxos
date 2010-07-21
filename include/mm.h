@@ -21,19 +21,25 @@
 
 #include <system.h>
 
+#define MM_MAGIC (0xE1AFE909)
+#define HSIZE (sizeof(memory_header))
+#define start(header) (void*) ((u32) header + HSIZE)
+#define header(block) (memory_header*) ((u32) block - HSIZE)
+#define check(block) assert(block->magic == MM_MAGIC)
+
 typedef struct memory_header
 {
     u32 magic;
-    u32 start;
     u32 size;
-    bool free;
+    u8 free;
     struct memory_header *next;
 } memory_header;
 
 void mm_init(multiboot_header*);
-void *malloc(u32 size);
+void *malloc(u32);
 void free(void*);
 void *realloc(void*, u32);
+
 void coredump();
 u32 free_count();
 
