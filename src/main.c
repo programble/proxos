@@ -40,9 +40,9 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     __asm__ __volatile__ ("sti");
     
     tty_init();
+    mm_init(multiboot);
     timer_init();
     keyboard_init();
-    mm_init(multiboot);
 
     puts("\n:: Booted with ");
     puts(multiboot->boot_loader_name);
@@ -67,38 +67,6 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
     puts(")\n");
 
     coredump();
-
-    /*void *foo = malloc(8);
-    void *bar = malloc(4);
-    void *baz = malloc(16);
-    free(bar);
-    coredump();
-    free(foo);
-    coredump();
-    free(baz);
-    coredump();*/
-
-#define _(x) puts(#x); x
-
-    _(char *foo = malloc(1));
-    coredump();
-    _(foo = realloc(foo, 2));
-    coredump();
-    _(char *bar = malloc(3));
-    coredump();
-    _(foo = realloc(foo, 3));
-    coredump();
-    _(bar = realloc(bar, 4));
-    coredump();
-
-    /*_(char *foo = malloc(3));
-    coredump();
-    _(malloc(5));
-    coredump();
-    _(free(foo));
-    coredump();
-    _(foo = malloc(3));
-    coredump();*/
 
     /* Idle loop */
     while (true)

@@ -41,6 +41,7 @@ void free(void*);
 void *realloc(void*, u32);
 
 void coredump();
+void headerdump();
 u32 free_count();
 
 #endif

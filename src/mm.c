@@ -25,6 +25,8 @@ bool mm_installed = false;
 memory_header *init_prev_header = NULL;
 void init_free_block(u32 base, u32 length)
 {
+    if (base < 0x100000)
+        return;
     /* Block must be at least capable of holding 1 byte (10 bytes total) */
     if (length < HSIZE + sizeof(char))
         return;
@@ -117,7 +119,7 @@ void *malloc(u32 size)
             __asm__("sti");
             return start(block);
         }
-        else if (block->size > size)
+        else if (block->size > size + HSIZE + sizeof(char))
         {
             memory_header *leftover = (memory_header*) (start(block) + size);
             leftover->magic = MM_MAGIC;
@@ -143,6 +145,13 @@ void merge()
     {
         check(block);
         check(block->next);
+
+        /* Make sure block->next physically follows block */
+        if ((memory_header*) (start(block) + block->size) != block->next)
+        {
+            block = block->next;
+            continue;
+        }
 
         if (block->free && block->next->free)
         {
@@ -208,6 +217,25 @@ void coredump()
         puts(int_to_str((u32) start(block) + block->size, 16));
         puts("\t0x");
         puts(int_to_str(block->size, 16));
+        puts("\n");
+    }
+}
+
+void headerdump()
+{
+    puts("\n");
+    for (memory_header *block = first_block; block; block = block->next)
+    {
+        puts("0x");
+        puts(int_to_str((u32) block, 16));
+        puts(" magic=0x");
+        puts(int_to_str(block->magic, 16));
+        puts(" size=0x");
+        puts(int_to_str(block->size, 16));
+        puts(" free=0x");
+        puts(int_to_str(block->free, 16));
+        puts(" next=0x");
+        puts(int_to_str((u32) block->next, 16));
         puts("\n");
     }
 }
