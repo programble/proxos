@@ -41,7 +41,7 @@ function asm
 function cc
 {
     echo " [ CC ] $1 -> $2"
-    $CC -std=c99 -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs -nostdinc -ffreestanding -fno-builtin -Iinclude/ -o $2 -c $1
+    $CC -m32 -std=c99 -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs -nostdinc -ffreestanding -fno-builtin -Iinclude/ -o $2 -c $1
     if [ $? -ne 0 ]; then
         echo " [ ERROR ]"
         exit
@@ -66,7 +66,7 @@ done
 
 # Link the kernel
 echo " [ LD ] build/linker.ld -> output/kernel.bin"
-$LD -T build/linker.ld -o output/kernel.elf output/*.o
+$LD -melf_i386 -T build/linker.ld -o output/kernel.elf output/*.o
 if [ $? -ne 0 ]; then
     echo " [ ERROR ]"
     exit
