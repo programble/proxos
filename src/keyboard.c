@@ -209,6 +209,11 @@ char *gets()
     for (u32 i = 0;; i++)
     {
         char temp = getch();
+        if (i >= length)
+        {
+            length += 16;
+            data = realloc(data, length);
+        }
         if (temp == '\n')
         {
             data[i] = 0x0;
@@ -219,11 +224,6 @@ char *gets()
             i--;
             i--;
             continue;
-        }
-        if (i >= length)
-        {
-            length += 16;
-            data = realloc(data, length);
         }
         data[i] = temp;
     }

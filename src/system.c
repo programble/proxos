@@ -82,6 +82,8 @@ void _panic(char *message, char *file, char *line)
         halt();
     }
     in_panic = 1;
+    /* Dump a coredump */
+    /*coredump();*/
     puts("\n");
     set_text_color_foreground(red);
     puts(":: When in ");

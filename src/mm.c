@@ -196,10 +196,8 @@ u32 free_count()
 {
     u32 count = 0;
     for (memory_header *block = first_block; block; block = block->next)
-    {
         if (block->free)
             count += block->size;
-    }
     return count;
 }
 
