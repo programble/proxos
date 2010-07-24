@@ -79,6 +79,16 @@ void kmain(multiboot_header *multiboot, unsigned int magic)
         }
         else if (strcmp(input, "halt") == 0)
             halt();
+        else if (strcmp(input, "uptime") == 0)
+        {
+            puts("Up ");
+            puts(int_to_str(uptime_hours, 10));
+            puts(" hours, ");
+            puts(int_to_str(uptime_minutes, 10));
+            puts(" minutes, ");
+            puts(int_to_str(uptime_seconds, 10));
+            puts(" seconds\n");
+        }
         free(input);
     }
     

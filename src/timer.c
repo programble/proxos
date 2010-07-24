@@ -25,9 +25,19 @@ void timer_handler(struct regs *r)
     
     timer_ticks++;
 
-    /* Second test */
-    /*if (timer_ticks % 100 == 0)
-      puts(":");*/
+    /* Uptime */
+    if (timer_ticks % 100 == 0)
+        uptime_seconds++;
+    if (uptime_seconds == 60)
+    {
+        uptime_seconds = 0;
+        uptime_minutes++;
+    }
+    if (uptime_minutes == 60)
+    {
+        uptime_minutes = 0;
+        uptime_hours++;
+    }
 }
 
 void timer_phase(int hz)
@@ -41,9 +51,12 @@ void timer_phase(int hz)
 void timer_init()
 {
     puts(":: Initializing system timer\n");
-    puts("  > Setting tick counter\n");
+    puts("  > Setting tick counter and uptime\n");
     /* Set ticks to 0 */
     timer_ticks = 0;
+    uptime_seconds = 0;
+    uptime_minutes = 0;
+    uptime_hours = 0;
     puts("  > Setting interrupt frequency\n");
     /* Set frequency to 100 */
     timer_phase(100);

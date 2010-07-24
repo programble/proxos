@@ -22,8 +22,12 @@
 #include <irq.h>
 #include <tty.h>
 
-u64 timer_ticks;
+u32 timer_ticks;
 
 void timer_init();
+
+u64 uptime_seconds;
+u64 uptime_minutes;
+u64 uptime_hours;
 
 #endif
