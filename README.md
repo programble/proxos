@@ -1,5 +1,6 @@
 Proxos
 ======
+![](http://stillmaintained.com/programble/proxos.png)
 
 Programble's attempt at an OS.
 
