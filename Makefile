@@ -10,7 +10,8 @@ LD=ld
 
 CINCLUDES=-Iinclude/
 CWARNINGS=-Wall -Wextra -Wno-unused-parameter
-CFLAGS=-m32 -std=c99 -nostdlib -nostartfiles -nodefaultlibs -nostdinc -ffreestanding -fno-builtin
+#CFLAGS=-m32 -std=c99 -nostdlib -nostartfiles -nodefaultlibs -nostdinc -ffreestanding -fno-builtin
+CFLAGS=-m32 -std=c99 -nostdinc -ffreestanding -fno-builtin
 DFLAGS=-ggdb -DDEBUG -O0
 
 AFLAGS=-f elf
