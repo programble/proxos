@@ -15,52 +15,13 @@
 ; You should have received a copy of the GNU General Public License
 ; along with AmusOS.  If not, see <http://www.gnu.org/licenses/>.
 
-%macro ISR 1
-global isr%1
-isr%1:
-   cli   
-   push  byte 0
-   push  byte %1
-   jmp   isr_common_stub
-   iret  
-%endmacro
+extern syscall_handler ; syscall.c
 
-ISR 0
-ISR 1
-ISR 2
-ISR 3
-ISR 4
-ISR 5
-ISR 6
-ISR 7
-ISR 8
-ISR 9
-ISR 10
-ISR 11
-ISR 12
-ISR 13
-ISR 14
-ISR 15
-ISR 16
-ISR 17
-ISR 18
-ISR 19
-ISR 20
-ISR 21
-ISR 22
-ISR 23
-ISR 24
-ISR 25
-ISR 26
-ISR 27
-ISR 28
-ISR 29
-ISR 30
-ISR 31
-
-extern isr_handler ; isr.c
-
-isr_common_stub:
+global isr_syscall
+isr_syscall:
+    cli
+    push byte 0
+    push dword 0x80
     pusha
     push ds
     push es
@@ -73,7 +34,7 @@ isr_common_stub:
     mov gs, ax
     mov eax, esp
     push eax
-    mov eax, isr_handler
+    mov eax, syscall_handler
     call eax
     pop eax
     pop gs

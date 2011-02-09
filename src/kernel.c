@@ -16,26 +16,21 @@
  *  along with AmusOS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <idt.h>
-
-idt_entry idt[256];
-idt_ptr idtp;
-
-void idt_set_gate(u8 num, u64 base, u16 sel, u8 flags)
+void halt()
 {
-    idt[num].base_lo = (base & 0xFFFF);
-    idt[num].base_hi = (base >> 16) & 0xFF;
-    idt[num].sel = sel;
-    idt[num].flags = flags;
-    idt[num].always0 = 0x0;
+    asm("cli");
+    asm("hlt");
 }
 
-void idt_install()
+u8 inportb(u16 port)
 {
-    idtp.limit = (sizeof (idt_entry) * 256) - 1;
-    idtp.base = (u32) &idt;
-
-    memset((u8*) &idt, 0, sizeof(idt_entry) * 256);
-
-    idt_load();
+    u8 ret;
+    asm("inb %1, %0" : "=a" (ret) : "dN" (port));
+    return ret;
 }
+
+void outportb(u16 port, u8 data)
+{
+    __asm__ __volatile__("outb %1, %0" : : "dN" (port), "a" (data));
+}
+

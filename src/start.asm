@@ -1,24 +1,24 @@
 ; Copyright 2010 Curtis McEnroe <programble@gmail.com>
 ;
-; This file is part of Proxos.
+; This file is part of AmusOS.
 ;
-; Proxos is free software: you can redistribute it and/or modify
+; AmusOS is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
 ; the Free Software Foundation, either version 3 of the License, or
 ; (at your option) any later version.
 ;
-; Proxos is distributed in the hope that it will be useful,
+; AmusOS is distributed in the hope that it will be useful,
 ; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ; GNU General Public License for more details.
 ;
 ; You should have received a copy of the GNU General Public License
-; along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
+; along with AmusOS.  If not, see <http://www.gnu.org/licenses/>.
 
 global loader
-extern kmain ; Defined in main.c
+extern kmain ; main.c
 
-; Multiboot setup
+; Multiboot
 MODULEALIGN equ 1<<0
 MEMINFO equ 1<<1
 FLAGS equ MODULEALIGN | MEMINFO
@@ -32,16 +32,16 @@ MultiBootHeader:
     dd FLAGS
     dd CHECKSUM
 
-section .text        
+section .text
 
 STACKSIZE equ 0x4000
 
 loader:
-    mov esp, stack+STACKSIZE ; Set up the stack
+    mov esp, stack+STACKSIZE ; Stack setup
     push eax ; Multiboot magic
-    push ebx ; Multiboot info
+    push ebx ; Miltiboot info
 
-    call kmain ; Call the C kernel
+    call kmain ; Call C kernel
 
     cli
 

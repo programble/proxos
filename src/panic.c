@@ -16,26 +16,22 @@
  *  along with AmusOS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <idt.h>
+#include <tty.h>
 
-idt_entry idt[256];
-idt_ptr idtp;
+bool recursive_panic = false;
 
-void idt_set_gate(u8 num, u64 base, u16 sel, u8 flags)
+void _panic(const string message, const string function, const string file, const string line)
 {
-    idt[num].base_lo = (base & 0xFFFF);
-    idt[num].base_hi = (base >> 16) & 0xFF;
-    idt[num].sel = sel;
-    idt[num].flags = flags;
-    idt[num].always0 = 0x0;
-}
-
-void idt_install()
-{
-    idtp.limit = (sizeof (idt_entry) * 256) - 1;
-    idtp.base = (u32) &idt;
-
-    memset((u8*) &idt, 0, sizeof(idt_entry) * 256);
-
-    idt_load();
+    if (recursive_panic)
+        halt();
+    recursive_panic = true;
+    puts("\n\nERROR\n\n");
+    puts(message);
+    puts("\n\n");
+    puts(function);
+    puts("@");
+    puts(file);
+    puts(":");
+    puts(line);
+    halt();
 }

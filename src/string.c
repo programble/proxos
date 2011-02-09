@@ -16,26 +16,32 @@
  *  along with AmusOS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <idt.h>
+#include <string.h>
 
-idt_entry idt[256];
-idt_ptr idtp;
-
-void idt_set_gate(u8 num, u64 base, u16 sel, u8 flags)
+u8 *memcpy(u8 *dest, u8 *src, u32 count)
 {
-    idt[num].base_lo = (base & 0xFFFF);
-    idt[num].base_hi = (base >> 16) & 0xFF;
-    idt[num].sel = sel;
-    idt[num].flags = flags;
-    idt[num].always0 = 0x0;
+    for (u32 i = 0; i < count; i++)
+        dest[i] = src[i];
+    return dest;
 }
 
-void idt_install()
+u8 *memset(u8 *dest, u8 val, u32 count)
 {
-    idtp.limit = (sizeof (idt_entry) * 256) - 1;
-    idtp.base = (u32) &idt;
+    for (u32 i = 0; i < count; i++)
+        dest[i] = val;
+    return dest;
+}
 
-    memset((u8*) &idt, 0, sizeof(idt_entry) * 256);
+u16 *memsetw(u16 *dest, u16 val, u32 count)
+{
+    for (u32 i = 0; i < count; i++)
+        dest[i] = val;
+    return dest;
+}
 
-    idt_load();
+u32 strlen(const string s)
+{
+    u32 i;
+    for (i = 0; s[i] != 0; i++);
+    return i;
 }

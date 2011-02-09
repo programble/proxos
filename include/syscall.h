@@ -16,26 +16,18 @@
  *  along with AmusOS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __SYSCALL_H__
+#define __SYSCALL_H__
+
+#include <isr.h>
 #include <idt.h>
 
-idt_entry idt[256];
-idt_ptr idtp;
+#define SYSCALL_INTERRUPT 0x80
+#define SYSCALL_COUNT 20
 
-void idt_set_gate(u8 num, u64 base, u16 sel, u8 flags)
-{
-    idt[num].base_lo = (base & 0xFFFF);
-    idt[num].base_hi = (base >> 16) & 0xFF;
-    idt[num].sel = sel;
-    idt[num].flags = flags;
-    idt[num].always0 = 0x0;
-}
+#define SYSCALL_WRAPPER(func) syscall_##func
+#define SYSCALL_RETURN_WRAP(type, func) void SYSCALL_WRAPPER(func) (type *val) { *val = func(); }
 
-void idt_install()
-{
-    idtp.limit = (sizeof (idt_entry) * 256) - 1;
-    idtp.base = (u32) &idt;
+void syscall_install();
 
-    memset((u8*) &idt, 0, sizeof(idt_entry) * 256);
-
-    idt_load();
-}
+#endif

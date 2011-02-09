@@ -1,24 +1,31 @@
 /*  Copyright 2010 Curtis McEnroe <programble@gmail.com>
  *
- *  This file is part of Proxos.
+ *  This file is part of AmusOS.
  *
- *  Proxos is free software: you can redistribute it and/or modify
+ *  AmusOS is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  * 
- *  Proxos is distributed in the hope that it will be useful,
+ *  AmusOS is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Proxos.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with AmusOS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <keyboard.h>
 
-char keymap_us[128] =
+bool left_shift = false;
+bool right_shift = false;
+
+bool ctrl = false;
+
+bool alt = false;
+
+char keymap[128] =
 {
     0, 27,
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
@@ -34,29 +41,29 @@ char keymap_us[128] =
     0, /* Alt */
     ' ',
     0, /* Caps lock */
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* F1 - F10 */
+    '\x83', '\x84', '\x85', '\x86', '\x87', '\x88', '\x89', '\x8A', '\x8B', /* F1 - F10 */
     0, /* Num lock */
     0, /* Scroll lock */
-    0, /* Home */
-    0, /* Up */
-    0, /* Page up */
+    '\x8E', /* Home */
+    '\x8F', /* Up */
+    '\x90', /* Page up */
     '-',
-    0, /* Left */
+    '\x91', /* Left */
     0,
-    0, /* Right */
+    '\x92', /* Right */
     '+',
-    0, /* End */
-    0, /* Down */
-    0, /* Page down */
-    0, /* Insert */
-    0, /* Delete */
+    '\x93', /* End */
+    '\x94', /* Down */
+    '\x95', /* Page down */
+    '\x96', /* Insert */
+    '\x97', /* Delete */
     0, 0, 0,
-    0, /* F11 */
-    0, /* F12 */
+    '\x98', /* F11 */
+    '\x99', /* F12 */
     0,
 };
 
-char keymap_us_shift[128] =
+char keymap_shift[128] =
 {
     0, 27,
     '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '\b',
@@ -72,160 +79,129 @@ char keymap_us_shift[128] =
     0, /* Alt */
     ' ',
     0, /* Caps lock */
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* F1 - F10 */
+    '\x83', '\x84', '\x85', '\x86', '\x87', '\x88', '\x89', '\x8A', '\x8B', /* F1 - F10 */
     0, /* Num lock */
     0, /* Scroll lock */
-    0, /* Home */
-    0, /* Up */
-    0, /* Page up */
+    '\x8E', /* Home */
+    '\x8F', /* Up */
+    '\x90', /* Page up */
     '-',
-    0, /* Left */
+    '\x91', /* Left */
     0,
-    0, /* Right */
+    '\x92', /* Right */
     '+',
-    0, /* End */
-    0, /* Down */
-    0, /* Page down */
-    0, /* Insert */
-    0, /* Delete */
+    '\x93', /* End */
+    '\x94', /* Down */
+    '\x95', /* Page down */
+    '\x96', /* Insert */
+    '\x97', /* Delete */
     0, 0, 0,
-    0, /* F11 */
-    0, /* F12 */
+    '\x98', /* F11 */
+    '\x99', /* F12 */
     0,
 };
 
-typedef struct kbuffer
+typedef struct event_queue
 {
-    char data;
-    struct kbuffer *previous;
-} kbuffer;
+    key_event event;
+    struct event_queue *previous;
+} event_queue;
 
-kbuffer *kbuffer_first;
-kbuffer *kbuffer_last;
+event_queue *event_queue_head;
+event_queue *event_queue_tail;
 
-void kbuffer_enqueue(char data)
+void event_enqueue(key_event event)
 {
-    kbuffer *new = malloc(sizeof(kbuffer));
-    new->data = data;
+    event_queue *new = malloc(sizeof(event_queue));
+    new->event = event;
     new->previous = NULL;
-    if (kbuffer_last)
+    if (event_queue_tail)
     {
-        kbuffer_last->previous = new;
-        kbuffer_last = new;
+        event_queue_tail->previous = new;
+        event_queue_tail = new;
     }
     else
     {
-        kbuffer_first = new;
-        kbuffer_last = new;
+        event_queue_head = new;
+        event_queue_tail = new;
     }
 }
 
-char kbuffer_dequeue()
+key_event event_dequeue()
 {
-    assert(kbuffer_first);
-    char data = kbuffer_first->data;
-    kbuffer *first = kbuffer_first;
-    kbuffer_first = first->previous;
-    if (kbuffer_last == first)
-        kbuffer_last = NULL;
+    assert(event_queue_head, "No key events in queue");
+    key_event event = event_queue_head->event;
+    event_queue *first = event_queue_head;
+    event_queue_head = first->previous;
+    if (event_queue_tail == first)
+        event_queue_tail = NULL;
     free(first);
-    return data;
+    return event;
 }
 
-void keyboard_handler(struct regs *r)
+void keyboard_handler(registers *r)
 {
-    /* STFU GCC */
-    r = r;
+    u8 scancode = inportb(0x60);
 
-    u8 scancode;
-
-    scancode = inportb(0x60);
+    key_event event;
 
     if (scancode & 0x80)
     {
-        if (scancode == 0x2a + 0x80)
-        {
-            /* Left shift release */
-            left_shift = 0;
-        }
-        else if (scancode == 0x36 + 0x80)
-        {
-            /* Right shift release */
-            right_shift = 0;
-        }
-    }
-    else if (scancode == 0x2a)
-    {
-        /* Left shift press */
-        left_shift = 1;
-    }
-    else if (scancode == 0x36)
-    {
-        /* Right shift press */
-        right_shift = 1;
+        event.type = key_event_up;
+        scancode = scancode & ~0x80;
     }
     else
+        event.type = key_event_down;
+
+    event.keycode = scancode;
+    event.keychar = (left_shift || right_shift) ? keymap_shift[scancode] : keymap[scancode];
+    event.shift = left_shift || right_shift;
+    event.ctrl = ctrl;
+    event.alt = alt;
+
+    if (event.keycode == 0x2A && event.type == key_event_down)
+        left_shift = true;
+    else if (event.keycode == 0x2A && event.type == key_event_up)
+        left_shift = false;
+    else if (event.keycode == 0x36 && event.type == key_event_down)
+        right_shift = true;
+    else if (event.keycode == 0x36 && event.type == key_event_up)
+        right_shift = false;
+    else if (event.keycode == 0x1D && event.type == key_event_down)
+        ctrl = true;
+    else if (event.keycode == 0x1D && event.type == key_event_up)
+        ctrl = false;
+    else if (event.keycode == 0x38 && event.type == key_event_down)
+        alt = true;
+    else if (event.keycode == 0x38 && event.type == key_event_up)
+        alt = false;
+    else if (event.keycode == 0x60)
+        /* Ignore */;
+    else
     {
-        if (left_shift || right_shift)
-        {
-            putch(keymap_shift[scancode]);
-            kbuffer_enqueue(keymap_shift[scancode]);
-        }
-        else
-        {
-            putch(keymap[scancode]);
-            kbuffer_enqueue(keymap[scancode]);
-        }
+        event_enqueue(event);
     }
 }
 
-void keyboard_init()
+void keyboard_install()
 {
-    puts(":: Initializing keyboard driver\n");
-    left_shift = 0;
-    right_shift = 0;
-    kbuffer_first = NULL;
-    kbuffer_last = NULL;
-    puts("  > Using US keymap\n");
-    keymap = keymap_us;
-    keymap_shift = keymap_us_shift;
-    puts("  > Installing IRQ handler\n");
     irq_install_handler(1, keyboard_handler);
 }
 
-char getch()
+key_event get_key_event()
 {
-    /* Wait for a character */
-    while (!kbuffer_first)
-        __asm__("hlt");
-
-    return kbuffer_dequeue();
+    /* Wait for an event */
+    while (!event_queue_head)
+        asm("hlt");
+    return event_dequeue();
 }
 
-char *gets()
+bool get_key_event_nonblocking(key_event *dest)
 {
-    u32 length = 16;
-    char *data = malloc(length);
-    for (u32 i = 0;; i++)
+    if (event_queue_head)
     {
-        char temp = getch();
-        if (i >= length)
-        {
-            length += 16;
-            data = realloc(data, length);
-        }
-        if (temp == '\n')
-        {
-            data[i] = 0x0;
-            break;
-        }
-        if (temp == '\b')
-        {
-            i--;
-            i--;
-            continue;
-        }
-        data[i] = temp;
+        *dest = event_dequeue();
+        return true;
     }
-    return data;
+    return false;
 }
