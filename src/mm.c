@@ -57,7 +57,7 @@ void mm_init(multiboot_header *multiboot)
 
     assert(multiboot->flags & (1 << 6));
 
-    u32 kernel_start = (u32) &link_kernel_entry;
+    u32 kernel_start = (u32) &link_kernel_start;
     u32 kernel_end = (u32) &link_kernel_end;
 
     mmap_field *mmap = multiboot->mmap_addr;

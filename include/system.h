@@ -104,7 +104,7 @@ typedef struct
 
 char *int_to_str(u32, u32);
 
-extern void *link_kernel_entry;
+extern void *link_kernel_start;
 extern void *link_kernel_end;
 
 #include <mm.h>
