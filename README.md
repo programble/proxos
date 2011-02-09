@@ -2,57 +2,40 @@ Proxos
 ======
 ![](http://stillmaintained.com/programble/proxos.png)
 
-Programble's attempt at an OS.
+Programble's toy OS.
 
-Building
---------
+## Building
 
-To build Proxos, you will need:
+    make
 
- * NASM (or other compatible assembler)
- * clang (or other compatible C compiler, such as GCC)
- * ld (or other compatible linker)
- * mkiso/genisoimage
- * BASH
+### Dependencies
 
-To build Proxos with default settings, run
+  * GRUB
+  * `genisoimage` or `mkiso`
+  * C99 Compiler
+  * NASM
+  * Linker
 
-    ./build.sh
+### Options
 
-To build Proxos using GCC, run
+  * `STAGE2` Default: `/usr/lib/grub/i386-pc/stage2_eltorito`
+  * `GENISOIMAGE` Default: `genisoimage`
+  * `CC` Default: `gcc`
+  * `ASM` Default: `nasm`
+  * `LD` Default: `ld`
 
-    CC=gcc ./build.sh
+## License
 
-### Building Proxos for USB
+Copyright (c) 2011, Curtis McEnroe <programble@gmail.com>
 
-To build Proxos for USB, you will also need:
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
 
- * Syslinux
- * Isolinux
-
-The default settings assume Syslinux is installed in
-`/usr/lib/syslinux`.
-
-To build Proxos for USB, run
-
-    BOOTLOADER=isolinux ./build.sh
-
-The output ISO will automatically be patched with the `isohybrid`
-command, allowing the ISO to be booted from a USB stick.
-
-To write the ISO to a USB stick, run (as root)
-
-    dd if=proxos.iso of=/dev/sdx
-
-Where `x` is the corresponding letter of the USB stick.
-    
-### Other build settings
-
- * `ASM` Name of assembler to use (default: `nasm`)
- * `CC` Name of C compiler to use (default: `clang`)
- * `LD` Name of linker to use (default: `ld`)
- * `MKISO` Name of `mkiso` or `genisoimage` (default: `genisoimage`)
- * `STAGE2` Path to GRUB `stage2_eltorito` file (default: `build/stage2_eltorito`)
- * `BOOTLOADER` Which bootloader to use (one of either `grub` or `isolinux`) (default: `grub`)
- * `ISOLINUXBIN` The path to `isolinux.bin` (default: `/usr/lib/syslinux/isolinux.bin`)
- * `MBOOTC32` The path to `mboot.c32` multiboot module for Syslinux (default: `/usr/lib/syslinux/mboot.c32`)
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
