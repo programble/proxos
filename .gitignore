@@ -1,3 +1,7 @@
 *~
-output/
-proxos.iso
+*.o
+*.ao
+*.elf
+*.iso
+iso/
+include/version.h

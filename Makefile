@@ -62,9 +62,9 @@ $(KERNEL): include/version.h $(AOBJECTS) $(COBJECTS)
 %.ao: %.asm
 	$(ASM) $(AFLAGS) $< -o $@
 
-include/version.h: $(CSOURCES) Makefile
-	@echo "#define VERSION \"$(shell git describe --tags HEAD | cut -c2-)\"" > $@
-	@echo "#define COMPILER \"$(CC) \" __VERSION__" >> $@
+include/version.h: $(CSOURCES)
+	echo "#define VERSION \"$(shell git describe --tags HEAD | cut -c2-)\"" > $@
+	echo "#define COMPILER \"$(CC) \" __VERSION__" >> $@
 
 debug:
 	@$(MAKE) $(MFLAGS) $(KERNEL) CFLAGS="$(CFLAGS) $(DFLAGS)"
@@ -87,3 +87,4 @@ check-syntax: include/version.h
 	$(CC) $(CFLAGS) -fsynxtax-only $(CHK_SOURCES)
 
 .PHONY: iso clean qemu qemu-gdb todo sloc check-syntax debug
+
