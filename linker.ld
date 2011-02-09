@@ -2,11 +2,13 @@ ENTRY (loader)
 SECTIONS
 {
   . = 0x00100000;
-  link_kernel_entry = .;
+  link_kernel_start = .;
+  
   .mbheader : {
     *(.mbheader)
   }
-  .text :{
+
+  .text : {
     *(.text)
   }
 

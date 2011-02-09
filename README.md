@@ -23,6 +23,8 @@ Programble's toy OS.
   * `CC` Default: `gcc`
   * `ASM` Default: `nasm`
   * `LD` Default: `ld`
+  * `KERNEL` Default: `proxos.elf`
+  * `ISO` Default: `proxos.iso`
 
 ## License
 
