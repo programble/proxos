@@ -1,3 +1,5 @@
+#include <kernel.h>
+
 u8 inportb(u16 port)
 {
     u8 ret;
