@@ -19,10 +19,10 @@ AFLAGS=-f elf
 LDFLAGS=-melf_i386 -nostdlib -T linker.ld
 
 # Sources
-CSOURCES:=$(shell find src -name *.c)
+CSOURCES:=$(wildcard src/*.c)
 COBJECTS:=$(CSOURCES:%.c=%.o)
 
-ASOURCES:=$(shell find src -name *.asm)
+ASOURCES:=$(wildcard src/*.asm)
 AOBJECTS:=$(ASOURCES:%.asm=%.ao)
 
 KERNEL=proxos.elf
