@@ -1,5 +1,7 @@
 #include <Terminal.h>
 
+#include <Init.h>
+
 #define TTY_COLS 80
 #define TTY_ROWS 25
 
@@ -111,7 +113,7 @@ void Terminal_putString(const String s)
         Terminal_putChar(s[i]);
 }
 
-void Terminal_install()
+Bool Terminal_initialize()
 {
     Terminal_ram = (u16*) 0xB8000;
     Terminal_foregroundColor = Terminal_Color_gray;
@@ -119,4 +121,5 @@ void Terminal_install()
     Terminal_backgroundColor = Terminal_Color_black;
     Terminal_backgroundBright = false;
     Terminal_clear();
+    return true;
 }

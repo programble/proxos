@@ -16,7 +16,7 @@ typedef enum
     Terminal_Color_gray
 } Terminal_Color;
 
-void Terminal_install();
+Bool Terminal_initialize();
 
 void Terminal_clear();
 void Terminal_putChar(u8 c);

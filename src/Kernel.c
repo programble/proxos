@@ -1,5 +1,6 @@
 #include <Kernel.h>
 #include <Multiboot.h>
+#include <Init.h>
 #include <Terminal.h>
 
 u8 Kernel_inportb(u16 port)
@@ -34,7 +35,8 @@ void Kernel__panic(const String message, const String function, const String fil
 void Kernel_main(multiboot_header *multiboot, u32 magic)
 {
     Kernel_assert(magic == MULTIBOOT_BOOTLOADER_MAGIC, "Invalid bootloader magic");
-    Terminal_install();
+    /*Terminal_install();*/
+    Init_initialize(Init_Driver_terminal);
     Terminal_putString("\nProxos Kernel\n " VERSION "\n " COMPILED "\n " COMPILER "\n");
     Kernel_panic("Weee!");
 }
