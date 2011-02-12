@@ -1,7 +1,7 @@
 #ifndef __MULTIBOOT_H__
 #define __MULTIBOOT_H__
 
-#include <kernel.h>
+#include <Kernel.h>
 
 #define MULTIBOOT_HEADER_MAGIC 0x1BADB002
 #define MULTIBOOT_BOOTLOADER_MAGIC 0x2BADB002
