@@ -40,14 +40,14 @@ extern void *link_kernel_end;
 /* Halt, panic, assert! */
 #define Kernel_halt() asm("cli;hlt")
 
-void _panic(const String, const String, const String, const String);
+void Kernel__panic(const String message, const String function, const String file, const String line);
 
-#define Kernel_panic(x) _panic(x, __PRETTY_FUNCTION__, __FILE__, MACRO_STRING(__LINE__))
-#define Kernel_assert(x,m) if (!(x)) _panic("Assert failed: " #x "\n" m, __PRETTY_FUNCTION__, __FILE__, MACRO_STRING(__LINE__))
+#define Kernel_panic(x) Kernel__panic(x, __PRETTY_FUNCTION__, __FILE__, MACRO_STRING(__LINE__))
+#define Kernel_assert(x,m) if (!(x)) Kernel__panic("Assert failed: " #x "\n" m, __PRETTY_FUNCTION__, __FILE__, MACRO_STRING(__LINE__))
 
 /* IO Ports */
-u8 Kernel_inportb(u16);
-void Kernel_outportb(u16, u8);
+u8 Kernel_inportb(u16 port);
+void Kernel_outportb(u16 port, u8 data);
 
 /* Interrupts */
 #define Kernel_enable_interrupts() asm("sti")

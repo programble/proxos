@@ -22,12 +22,12 @@ void Terminal_clear();
 void Terminal_putChar(u8 c);
 void Terminal_putString(const String s);
 
-void Terminal_setForegroundColor(Terminal_Color c, bool bright);
-void Terminal_setBackgroundColor(Terminal_Color c, bool bright);
+void Terminal_setForegroundColor(Terminal_Color c, Bool bright);
+void Terminal_setBackgroundColor(Terminal_Color c, Bool bright);
 #define Terminal_setColor(fg, fb, bg, bb) Terminal_setForegroundColor(fg, fb); Terminal_setBackgroundColor(bg, bb)
 
-void Terminal_getForegroundColor(Terminal_Color *c, bool *bright);
-void Terminal_getBackgroundColor(Terminal_Color *c, bool *bright);
+void Terminal_getForegroundColor(Terminal_Color *c, Bool *bright);
+void Terminal_getBackgroundColor(Terminal_Color *c, Bool *bright);
 #define Terminal_getColor(fg, gb, bg, bb) Terminal_getForegroundColor(fg, fb); Terminal_getBackgroundColor(bg, bb)
 
 void Terminal_setCursorX(u8 x);

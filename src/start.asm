@@ -1,5 +1,5 @@
 global loader
-extern kmain ; main.c
+extern Kernel_main ; main.c
 
 ; Multiboot
 MODULEALIGN equ 1<<0
@@ -24,7 +24,7 @@ loader:
     push eax ; Multiboot magic
     push ebx ; Miltiboot info
 
-    call kmain ; Call C kernel
+    call Kernel_main ; Call C kernel
 
     cli
 
