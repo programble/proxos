@@ -5,9 +5,10 @@
 
 typedef enum
 {
+    Init_Driver_serial,
     Init_Driver_terminal,
 } Init_Driver;
-#define INIT_DRIVER_COUNT 1
+#define INIT_DRIVER_COUNT 2
 
 Bool Init__initialize(Init_Driver driver, String name);
 #define Init_initialize(x) Init__initialize(x, MACRO_STRING(x))
