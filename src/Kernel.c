@@ -37,6 +37,7 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Kernel_assert(magic == MULTIBOOT_BOOTLOADER_MAGIC, "Invalid bootloader magic");
     Init_initialize(Init_Driver_serial);
     Init_initialize(Init_Driver_terminal);
+    Init_initialize(Init_Driver_gdt);
     Text_putString("\nProxos Kernel\n " VERSION "\n " COMPILED "\n " COMPILER "\n");
     Kernel_panic("Weee!");
 }
