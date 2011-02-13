@@ -1,8 +1,7 @@
 #include <Kernel.h>
 #include <Multiboot.h>
 #include <Init.h>
-#include <Serial.h>
-#include <Terminal.h>
+#include <Text.h>
 
 u8 Kernel_inportb(u16 port)
 {
@@ -22,14 +21,14 @@ void Kernel__panic(const String message, const String function, const String fil
     if (recursivePanic)
         Kernel_halt();
     recursivePanic = true;
-    Terminal_putString("\n\n * Insert a clever panic phrase here *\n\n");
-    Terminal_putString(message);
-    Terminal_putString("\n\n");
-    Terminal_putString(function);
-    Terminal_putString("@");
-    Terminal_putString(file);
-    Terminal_putString(":");
-    Terminal_putString(line);
+    Text_putString("\n\n * Insert a clever panic phrase here *\n\n");
+    Text_putString(message);
+    Text_putString("\n\n");
+    Text_putString(function);
+    Text_putString("@");
+    Text_putString(file);
+    Text_putString(":");
+    Text_putString(line);
     Kernel_halt();
 }
 
@@ -38,6 +37,6 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Kernel_assert(magic == MULTIBOOT_BOOTLOADER_MAGIC, "Invalid bootloader magic");
     Init_initialize(Init_Driver_serial);
     Init_initialize(Init_Driver_terminal);
-    Terminal_putString("\nProxos Kernel\n " VERSION "\n " COMPILED "\n " COMPILER "\n");
+    Text_putString("\nProxos Kernel\n " VERSION "\n " COMPILED "\n " COMPILER "\n");
     Kernel_panic("Weee!");
 }
