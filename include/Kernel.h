@@ -50,7 +50,7 @@ u8 Kernel_inportb(u16 port);
 void Kernel_outportb(u16 port, u8 data);
 
 /* Interrupts */
-#define Kernel_enable_interrupts() asm("sti")
-#define Kernel_disable_interrupts() asm("cli")
+#define Kernel_enableInterrupts() asm("sti")
+#define Kernel_disableInterrupts() asm("cli")
 
 #endif

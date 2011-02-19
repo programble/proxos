@@ -19,6 +19,7 @@ void Kernel_outportb(u16 port, u8 data)
 Bool recursivePanic = false;
 void Kernel__panic(const String message, const String function, const String file, const String line)
 {
+    Kernel_disableInterrupts();
     if (recursivePanic)
         Kernel_halt();
     recursivePanic = true;
@@ -39,15 +40,18 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Kernel_assert(magic == MULTIBOOT_BOOTLOADER_MAGIC, "Invalid bootloader magic");
     Init_initialize(Init_Driver_serial);
     Init_initialize(Init_Driver_terminal);
+    
     Init_initialize(Init_Driver_gdt);
     Init_initialize(Init_Driver_idt);
+    Init_initialize(Init_Driver_isr);
+    Kernel_enableInterrupts();
+    
     Text_putString("\nProxos Kernel\n Version " VERSION "\n  " COMPILED "\n  " COMPILER "\n Booted with ");
     Text_putString(multiboot->bootloader_name);
     Text_putString(" ");
     Text_putString(multiboot->cmdline);
     Text_putString("\n");
     
-    Bool you = false;
-    Bool smart = true;
-    Kernel_assert(you == smart, "You're a stoop");
+    u8 x = 'a';
+    Text_putChar(x / 0);
 }
