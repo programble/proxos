@@ -3,6 +3,7 @@
 #include <Init.h>
 #include <Text.h>
 #include <Terminal.h>
+#include <String.h>
 
 u8 Kernel_inportb(u16 port)
 {
@@ -52,6 +53,13 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Text_putString(multiboot->cmdline);
     Text_putString("\n");
     
-    u8 x = 'a';
-    Text_putChar(x / 0);
+    /*u8 x = 'a';
+      Text_putChar(x / 0);*/
+    Text_putString(String_formatInt(42, 2));
+    Text_putChar('\n');
+    Text_putString(String_formatInt(42, 8));
+    Text_putChar('\n');
+    Text_putString(String_formatInt(42, 10));
+    Text_putChar('\n');
+    Text_putString(String_formatInt(42, 16));
 }

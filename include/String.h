@@ -9,4 +9,6 @@ u16 *String_setWord(u16 *dest, u16 val, u32 count);
 
 u32 String_length(const String);
 
+String String_formatInt(u32 n, u32 radix);
+
 #endif

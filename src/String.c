@@ -27,3 +27,17 @@ u32 String_length(const String s)
     for (i = 0; s[i] != 0; i++);
     return i;
 }
+
+String String_formatInt(u32 n, u32 radix)
+{
+    char numerals[16] = "0123456789ABCDEF";
+    static char s[33];
+    s[33] = 0;
+    u32 i = 33;
+    do
+    {
+        i--;
+        s[i] = numerals[n % radix];
+    } while ((n /= radix) > 0 && i);
+    return (String) (s + i);
+}
