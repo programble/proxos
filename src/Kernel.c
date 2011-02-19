@@ -38,6 +38,9 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Init_initialize(Init_Driver_serial);
     Init_initialize(Init_Driver_terminal);
     Init_initialize(Init_Driver_gdt);
+    Init_initialize(Init_Driver_idt);
     Text_putString("\nProxos Kernel\n " VERSION "\n " COMPILED "\n " COMPILER "\n");
-    Kernel_panic("Weee!");
+    Bool you = false;
+    Bool smart = true;
+    Kernel_assert(you == smart, "You're a stoop");
 }

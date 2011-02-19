@@ -4,8 +4,9 @@
 #include <Terminal.h>
 #include <Serial.h>
 #include <Gdt.h>
+#include <Idt.h>
 
-Bool (*init_functions[INIT_DRIVER_COUNT])() = {Serial_initialize, Terminal_initialize, Gdt_initialize};
+Bool (*init_functions[INIT_DRIVER_COUNT])() = {Serial_initialize, Terminal_initialize, Gdt_initialize, Idt_initialize};
 Bool initialized[INIT_DRIVER_COUNT] = {false};
 
 Bool Init__initialize(Init_Driver driver, String name)

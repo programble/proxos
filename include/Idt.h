@@ -5,11 +5,11 @@
 
 struct Idt_Entry
 {
-    u16 base_lo;
+    u16 baseLow;
     u16 sel;
     u8 always0;
     u8 flags;
-    u16 base_hi;
+    u16 baseHigh;
 } __attribute__((packed));
 typedef struct Idt_Entry Idt_Entry;
 
@@ -22,7 +22,7 @@ typedef struct Idt_Pointer Idt_Pointer;
 
 extern void Idt_load(); /* Idt.asm */
 
-void idt_set_gate(u8, u64, u16, u8);
-void idt_install();
+void Idt_setGate(u8 num, u64 base, u16 sel, u8 flags);
+Bool Idt_initialize();
 
 #endif
