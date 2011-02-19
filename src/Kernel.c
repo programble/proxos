@@ -41,7 +41,7 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Init_initialize(Init_Driver_terminal);
     Init_initialize(Init_Driver_gdt);
     Init_initialize(Init_Driver_idt);
-    Text_putString("\nProxos Kernel\n " VERSION "\n " COMPILED "\n " COMPILER "\n Booted with ");
+    Text_putString("\nProxos Kernel\n Version " VERSION "\n  " COMPILED "\n  " COMPILER "\n Booted with ");
     Text_putString(multiboot->bootloader_name);
     Text_putString(" ");
     Text_putString(multiboot->cmdline);
