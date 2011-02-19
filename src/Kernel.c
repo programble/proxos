@@ -2,6 +2,7 @@
 #include <Multiboot.h>
 #include <Init.h>
 #include <Text.h>
+#include <Terminal.h>
 
 u8 Kernel_inportb(u16 port)
 {
@@ -21,6 +22,7 @@ void Kernel__panic(const String message, const String function, const String fil
     if (recursivePanic)
         Kernel_halt();
     recursivePanic = true;
+    Terminal_setForegroundColor(Terminal_Color_red, true);
     Text_putString("\n\n === PANIC ===\n\n");
     Text_putString(message);
     Text_putString("\n\n");
