@@ -13,6 +13,7 @@ Terminal_Color Terminal_backgroundColor = Terminal_Color_black;
 Bool Terminal_backgroundBright = false;
 
 struct { u8 x; u8 y; } Terminal_cursor;
+u8 Terminal_cursorHeight = 2;
 
 void Terminal_updateCursor()
 {
@@ -103,6 +104,75 @@ void Terminal_putString(const String s)
 {
     for (u32 i = 0; i < String_length(s); i++)
         Terminal_putChar(s[i]);
+}
+
+void Terminal_setForegroundColor(Terminal_Color color, Bool bright)
+{
+    Terminal_foregroundColor = color;
+    Terminal_foregroundBright = bright;
+}
+
+void Terminal_setBackgroundColor(Terminal_Color color, Bool bright)
+{
+    Terminal_backgroundColor = color;
+    Terminal_backgroundBright = bright;
+}
+
+void Terminal_getForegroundColor(Terminal_Color *color, Bool *bright)
+{
+    *color = Terminal_foregroundColor;
+    *bright = Terminal_foregroundBright;
+}
+
+void Terminal_getBackgroundColor(Terminal_Color *color, Bool *bright)
+{
+    *color = Terminal_backgroundColor;
+    *bright = Terminal_backgroundBright;
+}
+
+void Terminal_setCursorX(u8 x)
+{
+    Terminal_cursor.x = x;
+    Terminal_updateCursor();
+}
+
+void Terminal_setCursorY(u8 y)
+{
+    Terminal_cursor.y = y;
+    Terminal_updateCursor();
+}
+
+u8 Terminal_getCursorX()
+{
+    return Terminal_cursor.x;
+}
+
+u8 Terminal_getCursorY()
+{
+    return Terminal_cursor.y;
+}
+
+void Terimal_hideCursor()
+{
+    Kernel_outportb(0x3D4, 0x0A);
+    Kernel_outportb(0x3D5, 16);
+}
+
+void Terminal_showCursor()
+{
+    Kernel_outportb(0x3D4, 0x0A);
+    Kernel_outportb(0x3D5, Terminal_cursorHeight);
+}
+
+void Terminal_setCursorHeight(u32 height)
+{
+    Terminal_cursorHeight = 16 - height;
+    Terminal_showCursor();
+}
+
+u32 Terminal_getCursorHeight()
+{
+    return 16 - Terminal_cursorHeight;
 }
 
 Bool Terminal_initialize()
