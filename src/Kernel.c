@@ -45,6 +45,7 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Init_initialize(Init_Driver_gdt);
     Init_initialize(Init_Driver_idt);
     Init_initialize(Init_Driver_isr);
+    Init_initialize(Init_Driver_irq);
     Kernel_enableInterrupts();
     
     Text_putString("\nProxos Kernel\n Version " VERSION "\n  " COMPILED "\n  " COMPILER "\n Booted with ");
@@ -53,13 +54,6 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Text_putString(multiboot->cmdline);
     Text_putString("\n");
     
-    /*u8 x = 'a';
-      Text_putChar(x / 0);*/
-    Text_putString(String_formatInt(42, 2));
-    Text_putChar('\n');
-    Text_putString(String_formatInt(42, 8));
-    Text_putChar('\n');
-    Text_putString(String_formatInt(42, 10));
-    Text_putChar('\n');
-    Text_putString(String_formatInt(42, 16));
+    u8 x = 'a';
+    Text_putChar(x / 0);
 }
