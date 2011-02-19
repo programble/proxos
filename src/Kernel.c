@@ -21,7 +21,7 @@ void Kernel__panic(const String message, const String function, const String fil
     if (recursivePanic)
         Kernel_halt();
     recursivePanic = true;
-    Text_putString("\n\n * Time out for a second. That wasn't supposed to happen. Do you see that thing that fell out of me? *\n\n");
+    Text_putString("\n\n === PANIC ===\n\n");
     Text_putString(message);
     Text_putString("\n\n");
     Text_putString(function);

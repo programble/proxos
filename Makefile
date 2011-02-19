@@ -4,7 +4,7 @@ GENISOIMAGE=genisoimage
 ISO=proxos.iso
 
 # Compiling options
-CC=gcc
+CC=clang
 ASM=nasm
 LD=ld
 
