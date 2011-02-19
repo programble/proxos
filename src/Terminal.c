@@ -5,14 +5,12 @@
 #define TTY_COLS 80
 #define TTY_ROWS 25
 
-#define Terminal_assertInstalled() Kernel_assert(Terminal_ram == (u16*) 0xB8000, "Terminal not installed")
+u16 *Terminal_ram = (u16*) 0xB8000;
 
-u16 *Terminal_ram;
-
-Terminal_Color Terminal_foregroundColor;
-Bool Terminal_foregroundBright;
-Terminal_Color Terminal_backgroundColor;
-Bool Terminal_backgroundBright;
+Terminal_Color Terminal_foregroundColor = Terminal_Color_gray;
+Bool Terminal_foregroundBright = false;
+Terminal_Color Terminal_backgroundColor = Terminal_Color_black;
+Bool Terminal_backgroundBright = false;
 
 struct { u8 x; u8 y; } Terminal_cursor;
 
@@ -27,8 +25,6 @@ void Terminal_updateCursor()
 
 void Terminal_clear()
 {
-    Terminal_assertInstalled();
-
     u16 blank = ' ' | ((((Terminal_backgroundColor | (Terminal_backgroundBright << 3)) << 4) | ((Terminal_foregroundColor | (Terminal_foregroundBright << 3)) & 0x0F)) << 8);
     for (u8 i = 0; i < TTY_ROWS; i++)
         String_setWord(Terminal_ram + i * TTY_COLS, blank, TTY_COLS);
@@ -39,8 +35,6 @@ void Terminal_clear()
 
 void Terminal_scroll()
 {
-    Terminal_assertInstalled();
-
     u16 blank = ' ' | ((((Terminal_backgroundColor | (Terminal_backgroundBright << 3)) << 4) | ((Terminal_foregroundColor | (Terminal_foregroundBright << 3)) & 0x0F)) << 8);
 
     if (Terminal_cursor.y >= TTY_ROWS)
@@ -70,8 +64,6 @@ void Terminal_moveBack()
 
 void Terminal_putChar(u8 c)
 {
-    Terminal_assertInstalled();
-
     switch (c)
     {
     case '\b':
@@ -115,11 +107,6 @@ void Terminal_putString(const String s)
 
 Bool Terminal_initialize()
 {
-    Terminal_ram = (u16*) 0xB8000;
-    Terminal_foregroundColor = Terminal_Color_gray;
-    Terminal_foregroundBright = false;
-    Terminal_backgroundColor = Terminal_Color_black;
-    Terminal_backgroundBright = false;
     Terminal_clear();
     return true;
 }
