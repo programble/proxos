@@ -52,6 +52,9 @@ qemu: iso
 qemu-gdb: iso
 	qemu -serial stdio -s -S -cdrom $(ISO)
 
+bochs: iso
+	bochs -q
+
 kernel: $(KERNEL)
 
 $(KERNEL): include/version.h $(AOBJECTS) $(COBJECTS)
