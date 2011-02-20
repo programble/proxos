@@ -52,7 +52,10 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Text_putString(multiboot->bootloader_name);
     Text_putString(" ");
     Text_putString(multiboot->cmdline);
-    Text_putString("\n");
+    Text_putString("\n 0x");
+    Text_putString(String_formatInt((u32) &Kernel_linkStart, 16));
+    Text_putString(" - 0x");
+    Text_putString(String_formatInt((u32) &Kernel_linkEnd, 16));
     
     u8 x = 'a';
     Text_putChar(x / 0);

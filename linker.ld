@@ -2,7 +2,7 @@ ENTRY (loader)
 SECTIONS
 {
   . = 0x00100000;
-  link_kernel_start = .;
+  Kernel_linkStart = .;
   
   .mbheader : {
     *(.mbheader)
@@ -26,5 +26,5 @@ SECTIONS
     *(.bss)
     ebss = .;
   }
-  link_kernel_end = .;
+  Kernel_linkEnd = .;
 }

@@ -34,8 +34,8 @@ typedef enum
 #define NULL ((void*) 0)
 
 /* Linking things */
-extern void *link_kernel_start;
-extern void *link_kernel_end;
+extern void Kernel_linkStart;
+extern void Kernel_linkEnd;
 
 /* Halt, panic, assert! */
 #define Kernel_halt() asm("cli;hlt")
