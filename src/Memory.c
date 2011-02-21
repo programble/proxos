@@ -32,11 +32,15 @@ void Memory_Header_initialize(u32 base, u32 length)
     Memory_Header_setFree(header);
     header->size = length - sizeof(Memory_Header);
     header->next = NULL;
+    header->previous = NULL;
 
     if (!Memory_Header_first)
         Memory_Header_first = header;
     else
+    {
         previousHeader->next = header;
+        header->previous = previousHeader;
+    }
 
     previousHeader = header;
 }
@@ -108,6 +112,7 @@ void *Memory_allocate(u32 size)
             Memory_Header_setFree(leftover);
             leftover->size = header->size - size - sizeof(Memory_Header);
             leftover->next = header->next;
+            leftover->previous = header;
 
             header->next = leftover;
             header->size = size;
@@ -128,6 +133,25 @@ void Memory_free(void *memory)
     Memory_Header_assertMagic(header);
     Memory_Header_setFree(header);
 
+    Memory_Header *previous = header->previous;
+    if (Memory_Header_isFree(previous) && (Memory_Header*) ((u32) Memory_Header_blockStart(previous) + previous->size) == header)
+    {
+        previous->size += header->size + sizeof(Memory_Header);
+        header->magic = 0;
+        previous->next = header->next;
+        header->next->previous = previous;
+        header = previous;
+    }
+
+    Memory_Header *next = header->next;
+    if (Memory_Header_isFree(next) && (Memory_Header*) ((u32) Memory_Header_blockStart(header) + header->size) == next)
+    {
+        header->size += next->size + sizeof(Memory_Header);
+        next->magic = 0;
+        header->next = next->next;
+        header->next->previous = header;
+    }
+
     Kernel_enableInterrupts();
 }
 
@@ -147,19 +171,19 @@ void *Memory_reallocate(void *memory, u32 size)
 
 void Memory_headerDump()
 {
-    Text_putString("Header\t\tMagic\t\tFree\tSize\t\tNext\n");
+    Text_putString("HEADER\t\tMAGIC\t\tPREVIOUS\tNEXT\t\tSIZE\n");
     for (Memory_Header *header = Memory_Header_first; header; header = header->next)
     {
         Text_putString("0x");
         Text_putString(String_formatInt((u32) header, 16));
         Text_putString("\t0x");
         Text_putString(String_formatInt(header->magic, 16));
-        Text_putString("\t");
-        Text_putString(String_formatInt(Memory_Header_isFree(header), 2));
+        Text_putString(header->previous ? "\t0x" : "\t");
+        Text_putString(header->previous ? String_formatInt((u32) header->previous, 16) : "NULL\t");
+        Text_putString(header->next ? "\t0x" : "\t");
+        Text_putString(header->next ? String_formatInt((u32) header->next, 16) : "NULL\t");
         Text_putString("\t0x");
         Text_putString(String_formatInt(header->size, 16));
-        Text_putString("\t\t0x");
-        Text_putString(String_formatInt((u32) header->next, 16));
         Text_putString("\n");
     }
 }

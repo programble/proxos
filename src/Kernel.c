@@ -65,10 +65,17 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Text_putString(" - 0x");
     Text_putString(String_formatInt((u32) &Kernel_linkEnd, 16));
     Text_putString("\n");
+    
+    void *a = Memory_allocate(42);
+    void *b = Memory_allocate(43);
+    void *c = Memory_allocate(44);
+
+    Memory_free(b);
+    Memory_free(a);
+    Memory_free(c);
+
+    Memory_headerDump();
 
     while (true)
-    {
-        Time_sleep(300);
-        Text_putString(".");
-    }
+        asm("hlt");
 }

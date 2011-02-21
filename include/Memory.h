@@ -7,6 +7,7 @@ typedef struct Memory_Header
 {
     u32 magic;
     u32 size;
+    struct Memory_Header *previous;
     struct Memory_Header *next;
 } Memory_Header;
 
