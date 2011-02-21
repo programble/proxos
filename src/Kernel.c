@@ -64,7 +64,7 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Text_putString(String_formatInt((u32) &Kernel_linkStart, 16));
     Text_putString(" - 0x");
     Text_putString(String_formatInt((u32) &Kernel_linkEnd, 16));
-    Text_putString("\n");
+    Text_putString("\n\n");
     
     void *a = Memory_allocate(42);
     void *b = Memory_allocate(43);
