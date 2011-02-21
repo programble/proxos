@@ -5,6 +5,7 @@
 #include <Terminal.h>
 #include <String.h>
 #include <Memory.h>
+#include <Time.h>
 
 u8 Kernel_inportb(u16 port)
 {
@@ -53,6 +54,7 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Kernel_enableInterrupts();
 
     Init_initialize(Init_Driver_memory);
+    Init_initialize(Init_Driver_time);
     
     Text_putString("\nProxos Kernel\n Version " VERSION "\n  " COMPILED "\n  " COMPILER "\n Booted with ");
     Text_putString(multiboot->bootloader_name);
@@ -64,6 +66,9 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Text_putString(String_formatInt((u32) &Kernel_linkEnd, 16));
     Text_putString("\n");
 
-    u8 x = 'a';
-    Text_putChar(x / 0);
+    while (true)
+    {
+        Time_sleep(300);
+        Text_putString(".");
+    }
 }
