@@ -4,6 +4,7 @@
 #include <Text.h>
 #include <Terminal.h>
 #include <String.h>
+#include <Memory.h>
 
 u8 Kernel_inportb(u16 port)
 {
@@ -33,12 +34,15 @@ void Kernel__panic(const String message, const String function, const String fil
     Text_putString(file);
     Text_putString(":");
     Text_putString(line);
+    Text_putString("\n\n");
+    Memory_headerDump();
     Kernel_halt();
 }
 
 void Kernel_main(multiboot_header *multiboot, u32 magic)
 {
     Kernel_assert(magic == MULTIBOOT_BOOTLOADER_MAGIC, "Invalid bootloader magic");
+    Kernel_multiboot = multiboot;
     Init_initialize(Init_Driver_serial);
     Init_initialize(Init_Driver_terminal);
     
@@ -47,6 +51,8 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Init_initialize(Init_Driver_isr);
     Init_initialize(Init_Driver_irq);
     Kernel_enableInterrupts();
+
+    Init_initialize(Init_Driver_memory);
     
     Text_putString("\nProxos Kernel\n Version " VERSION "\n  " COMPILED "\n  " COMPILER "\n Booted with ");
     Text_putString(multiboot->bootloader_name);
@@ -56,7 +62,8 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Text_putString(String_formatInt((u32) &Kernel_linkStart, 16));
     Text_putString(" - 0x");
     Text_putString(String_formatInt((u32) &Kernel_linkEnd, 16));
-    
+    Text_putString("\n");
+
     u8 x = 'a';
     Text_putChar(x / 0);
 }

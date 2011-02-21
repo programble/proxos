@@ -10,9 +10,10 @@ typedef enum
     Init_Driver_gdt,
     Init_Driver_idt,
     Init_Driver_isr,
-    Init_Driver_irq
+    Init_Driver_irq,
+    Init_Driver_memory
 } Init_Driver;
-#define INIT_DRIVER_COUNT 6
+#define INIT_DRIVER_COUNT 7
 
 Bool Init__initialize(Init_Driver driver, String name);
 #define Init_initialize(x) Init__initialize(x, MACRO_STRING(x))

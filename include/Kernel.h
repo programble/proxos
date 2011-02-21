@@ -53,4 +53,8 @@ void Kernel_outportb(u16 port, u8 data);
 #define Kernel_enableInterrupts() asm("sti")
 #define Kernel_disableInterrupts() asm("cli")
 
+/* Global access to multiboot */
+#include <Multiboot.h>
+multiboot_header *Kernel_multiboot;
+
 #endif
