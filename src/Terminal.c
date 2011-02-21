@@ -73,7 +73,7 @@ void Terminal_putChar(u8 c)
         Terminal_moveBack();
         return;
     case '\t':
-        Terminal_cursor.x -= (Terminal_cursor.x % 8) + 8;
+        Terminal_cursor.x = Terminal_cursor.x - (Terminal_cursor.x % 8) + 8;
         break;
     case '\n':
         Terminal_cursor.y++;
