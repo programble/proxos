@@ -77,7 +77,7 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
             Kernel_panic("Panic command");
         else if (String_equals(input, "headerdump"))
             Memory_headerDump();
-
+        
         Memory_free(input);
     }
 }

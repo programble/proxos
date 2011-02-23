@@ -204,7 +204,7 @@ String Keyboard_getString(Bool echo)
         }
         if (c == '\b')
         {
-            i -= 2;
+            i -= (i == 0) ? 0 : 2;
             continue;
         }
         s[i] = c;
