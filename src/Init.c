@@ -9,8 +9,9 @@
 #include <Irq.h>
 #include <Memory.h>
 #include <Time.h>
+#include <Keyboard.h>
 
-Bool (*init_functions[INIT_DRIVER_COUNT])() = {Serial_initialize, Terminal_initialize, Gdt_initialize, Idt_initialize, Isr_initialize, Irq_initialize, Memory_initialize, Time_initialize};
+Bool (*init_functions[INIT_DRIVER_COUNT])() = {Serial_initialize, Terminal_initialize, Gdt_initialize, Idt_initialize, Isr_initialize, Irq_initialize, Memory_initialize, Time_initialize, Keyboard_initialize};
 Bool initialized[INIT_DRIVER_COUNT] = {false};
 
 Bool Init__initialize(Init_Driver driver, String name)

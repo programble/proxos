@@ -28,6 +28,14 @@ u32 String_length(const String s)
     return i;
 }
 
+Bool String_equals(const String a, const String b)
+{
+    for (; *a == *b; a++, b++)
+        if (*a == 0)
+            return true;
+    return false;
+}
+
 String String_formatInt(u32 n, u32 radix)
 {
     char numerals[16] = "0123456789ABCDEF";

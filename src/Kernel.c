@@ -6,6 +6,7 @@
 #include <String.h>
 #include <Memory.h>
 #include <Time.h>
+#include <Keyboard.h>
 
 u8 Kernel_inportb(u16 port)
 {
@@ -55,6 +56,7 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
 
     Init_initialize(Init_Driver_memory);
     Init_initialize(Init_Driver_time);
+    Init_initialize(Init_Driver_keyboard);
     
     Text_putString("\nProxos Kernel\n Version " VERSION "\n  " COMPILED "\n  " COMPILER "\n Booted with ");
     Text_putString(multiboot->bootloader_name);
@@ -65,17 +67,17 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Text_putString(" - 0x");
     Text_putString(String_formatInt((u32) &Kernel_linkEnd, 16));
     Text_putString("\n\n");
-    
-    void *a = Memory_allocate(42);
-    void *b = Memory_allocate(43);
-    void *c = Memory_allocate(44);
-
-    Memory_free(b);
-    Memory_free(a);
-    Memory_free(c);
-
-    Memory_headerDump();
 
     while (true)
-        asm("hlt");
+    {
+        Text_putString("$ ");
+        String input = Keyboard_getString(true);
+
+        if (String_equals(input, "panic"))
+            Kernel_panic("Panic command");
+        else if (String_equals(input, "headerdump"))
+            Memory_headerDump();
+
+        Memory_free(input);
+    }
 }
