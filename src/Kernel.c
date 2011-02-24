@@ -7,6 +7,7 @@
 #include <Memory.h>
 #include <Time.h>
 #include <Keyboard.h>
+#include <PCSpeaker.h>
 
 u8 Kernel_inportb(u16 port)
 {
@@ -77,6 +78,8 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
             Kernel_panic("Panic command");
         else if (String_equals(input, "headerdump"))
             Memory_headerDump();
+        else if (String_equals(input, "beep"))
+            PCSpeaker_beep(1000, 10);
         else if (String_equals(input, "windows"))
         {
             Terminal_clear();

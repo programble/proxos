@@ -47,10 +47,10 @@ iso/boot/grub/menu.lst: menu.lst
 	echo "kernel /boot/$(KERNEL)" >> $@
 
 qemu: iso
-	qemu -serial stdio -cdrom $(ISO)
+	qemu -serial stdio -soundhw pcspk -cdrom $(ISO)
 
 qemu-gdb: iso
-	qemu -serial stdio -s -S -cdrom $(ISO)
+	qemu -serial stdio -soundhw pcspk -s -S -cdrom $(ISO)
 
 bochs: iso
 	bochs -q
