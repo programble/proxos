@@ -2,21 +2,27 @@
 
 Functions for getting input from the keyboard.
 
-## `typedef enum Keyboard_EventType`
+## `enum Keyboard_EventType`
 
-  * `Keyboard_EventType_down`
-  * `Keyboard_EventType_up`
+    typedef enum
+    {
+        Keyboard_EventType_down,
+        Keyboard_EventType_up
+    } Keyboard_EventType;
 
 Describes the type of keyboard event. Pretty much self-explanatory.
 
-## `typedef struct Keyboard_Event`
+## `struct Keyboard_Event`
 
-  * `Keyboard_EventType type`
-  * `u32 code`
-  * `char character`
-  * `Bool shiftPressed`
-  * `Bool controlPressed`
-  * `Bool altPressed`
+    typedef struct
+    {
+        Keyboard_EventType type;
+        u32 code;
+        char character;
+        Bool shiftPressed;
+        Bool controlPressed;
+        Bool altPressed;
+    } Keyboard_Event;
 
 Describes a keyboard event.
 
