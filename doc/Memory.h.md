@@ -45,3 +45,32 @@ This function simply dumps a list of all memory headers to any text
 output available. It outputs each header's address, magic number/flag
 field, the addresses of its previous and next headers, and the size of
 its memory block.
+
+# Technical
+
+## Flag field
+
+The flag field in memory headers doubles as a magic number that is
+checked every time a header is used to detect memory header
+corruption. Also, the other 31 bits would have gone to waste
+otherwise. Only the least significant bit is ever flipped. It
+represents the free/used state of the memory block, 1 being free and 0
+being used.
+
+## Merging
+
+When `Memory_free` merges memory blocks, it looks at the previous and
+next headers of the block that has just been freed, and merges them by
+adding their sizes if they are physically adjacent.
+
+## Initialization
+
+When initialized, the memory manager adds free blocks of memory as
+listed in the multiboot info, making sure that the memory does not
+overlap with the kernel in any way.
+
+## Allocating
+
+Note that in order for a block of memory to be split, its size needs
+to be big enough to be split between the requested size and another
+header with a block big enough for one byte.
