@@ -1,4 +1,4 @@
-# `Memory.h`
+# Memory.h
 
 Functions relating to the allocation and freeing of heap memory.
 
@@ -9,7 +9,9 @@ free/used flag of its block, the size of its block, and pointers to
 the previous and next memory headers. Merging free blocks after a call
 to `Memory_free` takes advantage of this doubly-linked list.
 
-## `void *Memory_allocate(u32 size)`
+## Functions
+
+### `void *Memory_allocate(u32 size)`
 
 This function allocates a block of memory of size `size` on the
 heap.
@@ -25,21 +27,21 @@ and the memory block will be returned.
 
 Call `Memory_free` on the returned block to free it for re-use.
 
-## `void Memory_free(void *memory)`
+### `void Memory_free(void *memory)`
 
 This function frees a block of memory `memory` on the heap.
 
 The block's header's flag will be set to free and will then be merged
 with any adjacent free blocks.
 
-## `void *Memory_reallocate(void *memory, u32 size)`
+### `void *Memory_reallocate(void *memory, u32 size)`
 
 This function allocates a new block of memory of size `size` by
 calling `Memory_allocate`, copies the contents of `memory` to the new
 block of memory, then calls `Memory_free` on `memory`. It returns the
 newly allocated block of memory.
 
-## `void Memory_headerDump`
+### `void Memory_headerDump`
 
 This function simply dumps a list of all memory headers to any text
 output available. It outputs each header's address, magic number/flag
