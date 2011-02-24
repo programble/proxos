@@ -2,7 +2,7 @@
 
 Functions for text output over serial port.
 
-All functions operator on the COM1 port.
+All functions operate on the COM1 port.
 
 These functions are used for debug output using serial redirection in Qemu.
 
