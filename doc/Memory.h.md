@@ -39,7 +39,7 @@ calling `Memory_allocate`, copies the contents of `memory` to the new
 block of memory, then calls `Memory_free` on `memory`. It returns the
 newly allocated block of memory.
 
-## `void Memory_headerDump`
+## `void Memory_headerDump()`
 
 This function simply dumps a list of all memory headers to any text
 output available. It outputs each header's address, magic number/flag
