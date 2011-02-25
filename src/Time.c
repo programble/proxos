@@ -2,6 +2,7 @@
 
 #include <Irq.h>
 #include <Memory.h>
+#include <Threading.h>
 
 u32 Time_ticks = 0;
 Time_Callback *Time_Callback_first = NULL;
@@ -60,7 +61,7 @@ void Time_sleep(u32 ticks)
 {
     u32 start = Time_ticks;
     while (Time_ticks < start + ticks)
-        asm("hlt");
+        Threading_yield();
 }
 
 Bool Time_initialize()

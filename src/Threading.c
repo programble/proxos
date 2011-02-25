@@ -122,6 +122,12 @@ Threading_Thread *Threading_fork(void (*function)())
     return thread;
 }
 
+void Threading_yield()
+{
+    Threading_currentThread->counter = 0;
+    asm("hlt");
+}
+
 Bool Threading_initialize()
 {
     Threading_currentThread = Memory_allocate(sizeof(Threading_Thread));

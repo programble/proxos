@@ -3,6 +3,7 @@
 #include <Memory.h>
 #include <Irq.h>
 #include <Text.h>
+#include <Threading.h>
 
 Bool Keyboard_leftShiftPressed = false;
 Bool Keyboard_rightShiftPressed = false;
@@ -169,7 +170,7 @@ Keyboard_Event *Keyboard_getEvent(Bool blocking)
 {
     if (blocking)
         while (!Keyboard_EventQueue_head)
-            asm("hlt");
+            Threading_yield();
     return Keyboard_EventQueue_dequeue();
 }
 
