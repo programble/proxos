@@ -57,4 +57,7 @@ void Kernel_outportb(u16 port, u8 data);
 #include <Multiboot.h>
 multiboot_header *Kernel_multiboot;
 
+/* Access to stack pointer */
+extern void *Kernel_stackPointer;
+
 #endif

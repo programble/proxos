@@ -8,6 +8,7 @@
 #include <Time.h>
 #include <Keyboard.h>
 #include <PCSpeaker.h>
+#include <Threading.h>
 
 u8 Kernel_inportb(u16 port)
 {
@@ -20,6 +21,7 @@ void Kernel_outportb(u16 port, u8 data)
 {
     __asm__ __volatile__("outb %1, %0" : : "dN" (port), "a" (data));
 }
+
 
 Bool recursivePanic = false;
 void Kernel__panic(const String message, const String function, const String file, const String line)
@@ -42,6 +44,24 @@ void Kernel__panic(const String message, const String function, const String fil
     Kernel_halt();
 }
 
+void testA()
+{
+    for (int i = 0; i < 2000; i++)
+    {
+        Text_putString("A");
+        for (int j = 0; j < 50000; j++);
+    }
+}
+
+void testB()
+{
+    for (int i = 0; i < 2000; i++)
+    {
+        Text_putString("B");
+        for (int j = 0; j < 50000; j++);
+    }
+}
+
 void Kernel_main(multiboot_header *multiboot, u32 magic)
 {
     Kernel_assert(magic == MULTIBOOT_BOOTLOADER_MAGIC, "Invalid bootloader magic");
@@ -58,6 +78,7 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Init_initialize(Init_Driver_memory);
     Init_initialize(Init_Driver_time);
     Init_initialize(Init_Driver_keyboard);
+    Init_initialize(Init_Driver_threading);
     
     Text_putString("\nProxos Kernel\n Version " VERSION "\n  " COMPILED "\n  " COMPILER "\n Booted with ");
     Text_putString(multiboot->bootloader_name);
@@ -80,6 +101,11 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
             Memory_headerDump();
         else if (String_equals(input, "beep"))
             PCSpeaker_beep(1000, 10);
+        else if (String_equals(input, "forktest"))
+        {
+            Threading_fork(testA);
+            Threading_fork(testB);
+        }
         else if (String_equals(input, "windows"))
         {
             Terminal_clear();

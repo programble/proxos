@@ -1,4 +1,5 @@
 global loader
+global Kernel_stackPointer
 extern Kernel_main ; main.c
 
 ; Multiboot
@@ -36,3 +37,4 @@ section .bss
 align 4
 stack:
     resb STACKSIZE
+Kernel_stackPointer:
