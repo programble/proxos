@@ -103,9 +103,11 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
             PCSpeaker_beep(1000, 10);
         else if (String_equals(input, "forktest"))
         {
-            Threading_fork(testA);
-            Threading_fork(testB);
+            Threading_fork(testA)->priority = 10;
+            Threading_fork(testB)->priority = 5;
         }
+        else if (String_equals(input, "threaddump"))
+            Threading_threadDump();
         else if (String_equals(input, "windows"))
         {
             Terminal_clear();
