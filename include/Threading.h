@@ -28,4 +28,6 @@ typedef struct Threading_Thread
 Bool Threading_initialize();
 Threading_Thread *Threading_fork(void (*function)());
 
+void Threading_threadDump();
+
 #endif

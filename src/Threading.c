@@ -2,6 +2,8 @@
 
 #include <Memory.h>
 #include <Time.h>
+#include <Text.h>
+#include <String.h>
 
 Threading_Thread *Threading_currentThread;
 u32 Threading_threads;
@@ -133,4 +135,27 @@ Bool Threading_initialize()
     Threading_threads = 1;
     Time_addCallback(1, Threading_switchThreads);
     return true;
+}
+
+void Threading_threadDump()
+{
+    Text_putString("  ID\tSTATUS\tPRI\tCOUNTER\tSTACK\t\tFUNCTION\n");
+    Threading_Thread *thread = Threading_currentThread;
+    for (u32 i = 0; i < Threading_threads; i++)
+    {
+        Text_putString((thread == Threading_currentThread) ? "->" : "  ");
+        Text_putString(String_formatInt(thread->id, 10));
+        Text_putString("\t");
+        Text_putString(String_formatInt(thread->status, 10));
+        Text_putString("\t");
+        Text_putString(String_formatInt(thread->priority, 10));
+        Text_putString("\t");
+        Text_putString(String_formatInt(thread->counter, 10));
+        Text_putString("\t0x");
+        Text_putString(String_formatInt((u32) thread->stack, 16));
+        Text_putString("\t0x");
+        Text_putString(String_formatInt((u32) thread->function, 16));
+        Text_putString("\n");
+        thread = thread->next;
+    }
 }
