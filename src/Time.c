@@ -65,7 +65,7 @@ void Time_sleep(u32 ticks)
 
 Bool Time_initialize()
 {
-    Time_phase(100);
+    Time_phase(1000);
     Irq_installHandler(0, Time_tickHandler);
     return true;
 }
