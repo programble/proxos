@@ -57,10 +57,10 @@ bochs: iso
 
 kernel: $(KERNEL)
 
-$(KERNEL): $(AOBJECTS) $(COBJECTS)
+$(KERNEL): include/version.h $(AOBJECTS) $(COBJECTS)
 	$(LD) $(LDFLAGS) $(AOBJECTS) $(COBJECTS) -o $@
 
-%.o: %.c include/version.h
+%.o: %.c
 	$(CC) $(CFLAGS) $(CWARNINGS) $(CINCLUDES) -c $< -o $@
 
 %.ao: %.asm
