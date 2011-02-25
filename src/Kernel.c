@@ -108,30 +108,8 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
         }
         else if (String_equals(input, "threaddump"))
             Threading_threadDump();
-        else if (String_equals(input, "windows"))
-        {
-            Terminal_clear();
-            Time_sleep(100);
-            Terminal_setBackgroundColor(Terminal_Color_blue, false);
-            Terminal_clear();
-            Terminal_putString("\n\n\n\n\n\n\n\n");
-            for (int i = 0; i < 34; i++)
-                Terminal_putChar(' ');
-            Terminal_setColor(Terminal_Color_blue, false, Terminal_Color_gray, false);
-            Terminal_putString(" Windows ");
-            Terminal_setColor(Terminal_Color_gray, true, Terminal_Color_blue, false);
-            Terminal_putString("\n\n     A fatal exception 0E has occured at 0028:C0011E36 in UXD UMM(01) +\n");
-            Terminal_putString("     00010E36. The current application will be terminated.\n\n");
-            Terminal_putString("     *  Press any key to terminate the current application.\n");
-            Terminal_putString("     *  Press CTRL+ALT+DEL again to restart your computer. You will\n");
-            Terminal_putString("        lose any unsaved information in all applications.\n\n");
-            for (int i = 0; i < 27; i++)
-                Terminal_putChar(' ');
-            Terminal_putString("Press any key to continue ");
-            Keyboard_getChar(false);
-            Terminal_setColor(Terminal_Color_gray, false, Terminal_Color_black, false);
-            Terminal_clear();
-        }
+        else if (String_equals(input, "help"))
+            Text_putString("panic, headerdump, beep, forktest, threaddump\n");
         
         Memory_free(input);
     }
