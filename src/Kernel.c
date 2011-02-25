@@ -100,7 +100,7 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
         else if (String_equals(input, "headerdump"))
             Memory_headerDump();
         else if (String_equals(input, "beep"))
-            PCSpeaker_beep(1000, 10);
+            PCSpeaker_beep(1000, 100);
         else if (String_equals(input, "forktest"))
         {
             Threading_fork(testA)->priority = 10;
