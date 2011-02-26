@@ -62,20 +62,6 @@ void testB()
     }
 }
 
-void uptimeThread()
-{
-    extern u32 Time_ticks;
-    while (true)
-    {
-        u8 x = Terminal_getCursorX();
-        u8 y = Terminal_getCursorY();
-        Terminal_setCursorPosition(70, 0);
-        Terminal_putString(String_formatInt(Time_ticks / 1000, 10));
-        Terminal_setCursorPosition(x, y);
-        Time_sleep(1000);
-    }
-}
-
 void forkBomb()
 {
     while (true)
@@ -128,12 +114,10 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
         }
         else if (String_equals(input, "threaddump"))
             Threading_threadDump();
-        else if (String_equals(input, "uptime"))
-            Threading_fork(uptimeThread);
         else if (String_equals(input, "forkbomb"))
             Threading_fork(forkBomb);
         else if (String_equals(input, "help"))
-            Text_putString("panic, headerdump, beep, forktest, threaddump, uptime, forkbomb\n");
+            Text_putString("panic, headerdump, beep, forktest, threaddump, forkbomb\n");
         
         Memory_free(input);
     }
