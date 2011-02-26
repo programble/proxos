@@ -76,6 +76,12 @@ void uptimeThread()
     }
 }
 
+void forkBomb()
+{
+    while (true)
+        Threading_fork(forkBomb);
+}
+
 void Kernel_main(multiboot_header *multiboot, u32 magic)
 {
     Kernel_assert(magic == MULTIBOOT_BOOTLOADER_MAGIC, "Invalid bootloader magic");
@@ -124,6 +130,8 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
             Threading_threadDump();
         else if (String_equals(input, "uptime"))
             Threading_fork(uptimeThread);
+        else if (String_equals(input, "forkbomb"))
+            Threading_fork(forkBomb);
         else if (String_equals(input, "help"))
             Text_putString("panic, headerdump, beep, forktest, threaddump\n");
         
