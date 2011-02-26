@@ -94,7 +94,14 @@ void Threading_switchThreads()
         Threading_removeThread(Threading_currentThread->next);
         Threading_currentThread->counter = 0;
         return;
-    /* Skip over paused threads */
+    case Threading_ThreadStatus_sleeping:
+        if (Threading_currentThread->next->wakeTime <= Time_ticks)
+        {
+            Threading_currentThread->next->status = Threading_ThreadStatus_running;
+            Threading_currentThread->next->wakeTime = 0;
+            return;
+        }
+    /* Skip over paused/sleeping threads */
     case Threading_ThreadStatus_paused:
     {
         /* Move paused thread from after current to before to easily skip it */
@@ -116,6 +123,7 @@ Threading_Thread *Threading_fork(void (*function)())
     thread->stack = Memory_allocate(0x4000);
     thread->priority = 20;
     thread->counter = thread->priority;
+    thread->wakeTime = 0;
     thread->function = function;
     thread->status = Threading_ThreadStatus_ready;
     Threading_addThread(thread);
@@ -128,6 +136,14 @@ void Threading_yield()
     asm("hlt");
 }
 
+void Threading_sleep(u32 duration)
+{
+    Threading_currentThread->wakeTime = Time_ticks + duration;
+    Threading_currentThread->status = Threading_ThreadStatus_sleeping;
+    while (Threading_currentThread->status == Threading_ThreadStatus_sleeping)
+        Threading_yield();
+}
+
 Bool Threading_initialize()
 {
     Threading_currentThread = Memory_allocate(sizeof(Threading_Thread));
@@ -138,6 +154,7 @@ Bool Threading_initialize()
     Threading_currentThread->id = Threading_nextId++;
     Threading_currentThread->priority = 20;
     Threading_currentThread->counter = 20;
+    Threading_currentThread->wakeTime = 0;
     Threading_threads = 1;
     Time_addCallback(1, Threading_switchThreads);
     return true;
@@ -145,7 +162,7 @@ Bool Threading_initialize()
 
 void Threading_threadDump()
 {
-    Text_putString("  ID\tSTATUS\tPRI\tCOUNTER\tSTACK\t\tFUNCTION\n");
+    Text_putString("  ID\tSTATUS\tPRI\tCOUNTER\tWAKE\tSTACK\t\tFUNCTION\n");
     Threading_Thread *thread = Threading_currentThread;
     for (u32 i = 0; i < Threading_threads; i++)
     {
@@ -157,6 +174,8 @@ void Threading_threadDump()
         Text_putString(String_formatInt(thread->priority, 10));
         Text_putString("\t");
         Text_putString(String_formatInt(thread->counter, 10));
+        Text_putString("\t");
+        Text_putString((thread->wakeTime) ? String_formatInt(thread->wakeTime - Time_ticks, 10) : "AWAKE");
         Text_putString("\t0x");
         Text_putString(String_formatInt((u32) thread->stack, 16));
         Text_putString("\t0x");

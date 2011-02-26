@@ -8,6 +8,7 @@ typedef enum
     Threading_ThreadStatus_running,
     Threading_ThreadStatus_ready,
     Threading_ThreadStatus_paused,
+    Threading_ThreadStatus_sleeping,
     Threading_ThreadStatus_zombie
 } Threading_ThreadStatus;
 
@@ -20,6 +21,7 @@ typedef struct Threading_Thread
     void *stack;
     u32 priority;
     u32 counter;
+    u32 wakeTime;
     void (*function)();
     struct Threading_Thread *next;
     struct Threading_Thread *previous;
@@ -28,6 +30,7 @@ typedef struct Threading_Thread
 Bool Threading_initialize();
 Threading_Thread *Threading_fork(void (*function)());
 void Threading_yield();
+void Threading_sleep(u32 duration);
 
 void Threading_threadDump();
 

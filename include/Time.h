@@ -17,4 +17,6 @@ void Time_removeCallback(void (*callback)());
 
 void Time_sleep(u32 ticks);
 
+extern u32 Time_ticks;
+
 #endif

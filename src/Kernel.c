@@ -41,6 +41,8 @@ void Kernel__panic(const String message, const String function, const String fil
     Text_putString(line);
     Text_putString("\n\n");
     Memory_headerDump();
+    Text_putString("\n");
+    Threading_threadDump();
     Kernel_halt();
 }
 
@@ -66,6 +68,13 @@ void forkBomb()
 {
     while (true)
         Threading_fork(forkBomb);
+}
+
+void testSleep()
+{
+    Threading_sleep(5000);
+    Text_putString("foo");
+    Text_putString(String_formatInt(Time_ticks, 10));
 }
 
 void Kernel_main(multiboot_header *multiboot, u32 magic)
@@ -118,6 +127,8 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
             Threading_fork(forkBomb);
         else if (String_equals(input, "help"))
             Text_putString("panic, headerdump, beep, forktest, threaddump, forkbomb\n");
+        else if (String_equals(input, "test"))
+            Threading_fork(testSleep);
         
         Memory_free(input);
     }
