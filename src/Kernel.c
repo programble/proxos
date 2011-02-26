@@ -133,7 +133,7 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
         else if (String_equals(input, "forkbomb"))
             Threading_fork(forkBomb);
         else if (String_equals(input, "help"))
-            Text_putString("panic, headerdump, beep, forktest, threaddump\n");
+            Text_putString("panic, headerdump, beep, forktest, threaddump, uptime, forkbomb\n");
         
         Memory_free(input);
     }
