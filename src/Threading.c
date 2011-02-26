@@ -36,7 +36,7 @@ void Threading_endThread()
 {
     Threading_currentThread->status = Threading_ThreadStatus_zombie;
     Threading_currentThread->counter = 0;
-    asm("sti; hlt");
+    asm("hlt");
     Kernel_panic("Thread was not killed");
 }
 
