@@ -85,7 +85,7 @@ void Threading_switchThreads()
         /* Set up where we want the thread to end */
         __asm__ __volatile__("push %0" : : "r" (Threading_endThread));
         /* Jump to the new thread's function */
-        __asm__ __volatile__("mov $0x20, %%al; outb %%al, $0x20; sti; jmp *%0" : : "r" (Threading_currentThread->function));
+        __asm__ __volatile__("mov $0x20, %%al; outb %%al, $0x20; sti; jmp *%0" : : "r" (Threading_currentThread->function) : "al");
         /* Execution should never reach this point */
         Kernel_panic("Failed to jump to new thread");
         break;
