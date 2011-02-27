@@ -75,6 +75,7 @@ void Terminal_putChar(u8 c)
         //Terminal_moveBack();
         //Terminal_putChar(' ');
         //Terminal_moveBack();
+        Locking_releaseLock(Locking_Lock_terminal);
         return;
     case '\t':
         Terminal_cursor.x = Terminal_cursor.x - (Terminal_cursor.x % 8) + 8;
