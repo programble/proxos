@@ -69,14 +69,9 @@ void Terminal_moveBack()
 void Terminal_putChar(u8 c)
 {
     Locking_acquireLock(Locking_Lock_terminal);
+    Bool backspace = false;
     switch (c)
     {
-    case '\b':
-        //Terminal_moveBack();
-        //Terminal_putChar(' ');
-        //Terminal_moveBack();
-        Locking_releaseLock(Locking_Lock_terminal);
-        return;
     case '\t':
         Terminal_cursor.x = Terminal_cursor.x - (Terminal_cursor.x % 8) + 8;
         break;
@@ -85,6 +80,10 @@ void Terminal_putChar(u8 c)
     case '\r':
         Terminal_cursor.x = 0;
         break;
+    case '\b':
+        Terminal_moveBack();
+        backspace = true;
+        c = ' ';
     default:
     {
         u16 attributes = ((Terminal_backgroundColor | (Terminal_backgroundBright << 3)) << 4) | ((Terminal_foregroundColor | (Terminal_foregroundBright << 3)) & 0x0F);
@@ -93,6 +92,9 @@ void Terminal_putChar(u8 c)
         Terminal_cursor.x++;
     }
     }
+
+    if (backspace)
+        Terminal_moveBack();
 
     /* EOL */
     if (Terminal_cursor.x >= TTY_COLS)
