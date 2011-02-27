@@ -1,6 +1,7 @@
 #include <Terminal.h>
 
 #include <Init.h>
+#include <Locking.h>
 
 #define TTY_COLS 80
 #define TTY_ROWS 25
@@ -27,11 +28,13 @@ void Terminal_updateCursor()
 void Terminal_clear()
 {
     u16 blank = ' ' | ((((Terminal_backgroundColor | (Terminal_backgroundBright << 3)) << 4) | ((Terminal_foregroundColor | (Terminal_foregroundBright << 3)) & 0x0F)) << 8);
+    Locking_acquireLock(Locking_Lock_terminal);
     for (u8 i = 0; i < TTY_ROWS; i++)
         String_setWord(Terminal_ram + i * TTY_COLS, blank, TTY_COLS);
     Terminal_cursor.x = 0;
     Terminal_cursor.y = 0;
     Terminal_updateCursor();
+    Locking_releaseLock(Locking_Lock_terminal);
 }
 
 void Terminal_scroll()
@@ -65,12 +68,13 @@ void Terminal_moveBack()
 
 void Terminal_putChar(u8 c)
 {
+    Locking_acquireLock(Locking_Lock_terminal);
     switch (c)
     {
     case '\b':
-        Terminal_moveBack();
-        Terminal_putChar(' ');
-        Terminal_moveBack();
+        //Terminal_moveBack();
+        //Terminal_putChar(' ');
+        //Terminal_moveBack();
         return;
     case '\t':
         Terminal_cursor.x = Terminal_cursor.x - (Terminal_cursor.x % 8) + 8;
@@ -98,6 +102,7 @@ void Terminal_putChar(u8 c)
 
     Terminal_scroll();
     Terminal_updateCursor();
+    Locking_releaseLock(Locking_Lock_terminal);
 }
 
 void Terminal_putString(const String s)
