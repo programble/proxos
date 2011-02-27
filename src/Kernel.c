@@ -64,6 +64,15 @@ void testB()
     }
 }
 
+void testC()
+{
+    for (int i = 0; i < 2000; i++)
+    {
+        Text_putString("C");
+        for (int j = 0; j < 50000; j++);
+    }
+}
+
 void forkBomb()
 {
     while (true)
@@ -73,8 +82,7 @@ void forkBomb()
 void testSleep()
 {
     Threading_sleep(5000);
-    Text_putString("foo");
-    Text_putString(String_formatInt(Time_ticks, 10));
+    Text_putString("\nDone sleeping\n");
 }
 
 void Kernel_main(multiboot_header *multiboot, u32 magic)
@@ -105,11 +113,18 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
     Text_putString(String_formatInt((u32) &Kernel_linkEnd, 16));
     Text_putString("\n\n");
 
+    String lastInput = Memory_allocate(1);
     while (true)
     {
         Text_putString("$ ");
         String input = Keyboard_getString(true);
 
+        if (String_equals(input, "\x90"))
+        {
+            Memory_free(input);
+            input = lastInput;
+        }
+        
         if (String_equals(input, "panic"))
             Kernel_panic("Panic command");
         else if (String_equals(input, "headerdump"))
@@ -120,16 +135,19 @@ void Kernel_main(multiboot_header *multiboot, u32 magic)
         {
             Threading_fork(testA)->priority = 10;
             Threading_fork(testB)->priority = 5;
+            Threading_fork(testC)->priority = 40;
         }
         else if (String_equals(input, "threaddump"))
             Threading_threadDump();
         else if (String_equals(input, "forkbomb"))
             Threading_fork(forkBomb);
-        else if (String_equals(input, "help"))
-            Text_putString("panic, headerdump, beep, forktest, threaddump, forkbomb\n");
-        else if (String_equals(input, "test"))
+        else if (String_equals(input, "sleeptest"))
             Threading_fork(testSleep);
-        
-        Memory_free(input);
+        else if (String_equals(input, "help"))
+            Text_putString("panic, headerdump, beep, forktest, threaddump, forkbomb, sleeptest\n");
+
+        if (lastInput != input)
+            Memory_free(lastInput);
+        lastInput = input;
     }
 }
