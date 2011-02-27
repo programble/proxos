@@ -36,8 +36,8 @@ void Threading_endThread()
 {
     Threading_currentThread->status = Threading_ThreadStatus_zombie;
     Threading_currentThread->counter = 0;
-    asm("hlt");
-    Kernel_panic("Thread was not killed");
+    while (true)
+        Threading_yield();
 }
 
 void Threading_switchThreads()
@@ -109,11 +109,14 @@ void Threading_switchThreads()
         Threading_currentThread->next = pausedThread->next;
         Threading_currentThread->next->previous = Threading_currentThread;
         Threading_currentThread->previous->next = pausedThread;
+        pausedThread->next = Threading_currentThread;
+        pausedThread->previous = Threading_currentThread->previous;
         Threading_currentThread->previous = pausedThread;
+        Threading_currentThread->counter = 0;
         return;
     }
     }
-    Kernel_panic("Something went wrong");
+    Kernel_panic("Consequences will never be the same");
 }
 
 Threading_Thread *Threading_fork(void (*function)())
