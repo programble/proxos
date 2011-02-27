@@ -73,6 +73,12 @@ include/version.h: $(CSOURCES)
 debug:
 	@$(MAKE) $(MFLAGS) $(KERNEL) CFLAGS="$(CFLAGS) $(DFLAGS)"
 
+dry-asm:
+	@$(MAKE) $(MFLAGS) CFLAGS="$(CFLAGS) -S" $(COBJECTS)
+
+dry-pp:
+	@$(MAKE) $(MFLAGS) CFLAGS="$(CFLAGS) -E" $(COBJECTS)
+
 clean:
 	rm -f include/version.h
 	rm -f $(COBJECTS)
