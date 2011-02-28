@@ -16,14 +16,24 @@ Bool Serial_initialize()
    return true;
 }
 
-void Serial_putChar(char c)
+void Serial_printChar(char c)
 {
     while (!(Kernel_inportb(SERIAL_PORT + 5) & 0x20));
     Kernel_outportb(SERIAL_PORT, c);
 }
 
-void Serial_putString(const String s)
+void Serial_printString(const String s)
 {
     for (u32 i = 0; i < String_length(s); i++)
-        Serial_putChar(s[i]);
+        Serial_printChar(s[i]);
+}
+
+void Serial_putChar(char c)
+{
+    Serial_printChar(c);
+}
+
+void Serial_putString(const String s)
+{
+    Serial_printString(s);
 }

@@ -22,7 +22,6 @@ void Kernel_outportb(u16 port, u8 data)
     __asm__ __volatile__("outb %1, %0" : : "dN" (port), "a" (data));
 }
 
-
 Bool recursivePanic = false;
 noreturn Kernel__panic(const String message, const String function, const String file, const String line)
 {
@@ -31,17 +30,17 @@ noreturn Kernel__panic(const String message, const String function, const String
         Kernel_halt();
     recursivePanic = true;
     Terminal_setForegroundColor(Terminal_Color_red, true);
-    Text_putString("\n\n === PANIC ===\n\n");
-    Text_putString(message);
-    Text_putString("\n\n");
-    Text_putString(function);
-    Text_putString("@");
-    Text_putString(file);
-    Text_putString(":");
-    Text_putString(line);
-    Text_putString("\n\n");
+    Text_printString("\n\n === PANIC ===\n\n");
+    Text_printString(message);
+    Text_printString("\n\n");
+    Text_printString(function);
+    Text_printString("@");
+    Text_printString(file);
+    Text_printString(":");
+    Text_printString(line);
+    Text_printString("\n\n");
     Memory_headerDump();
-    Text_putString("\n");
+    Text_printString("\n");
     Threading_threadDump();
     Kernel_halt();
     while (true);
@@ -51,7 +50,7 @@ void testA()
 {
     for (int i = 0; i < 2000; i++)
     {
-        Text_putString("A");
+        Text_printString("A");
         for (int j = 0; j < 50000; j++);
         Memory_free(Memory_allocate(2));
     }
@@ -61,7 +60,7 @@ void testB()
 {
     for (int i = 0; i < 2000; i++)
     {
-        Text_putString("B");
+        Text_printString("B");
         for (int j = 0; j < 50000; j++);
         Memory_free(Memory_allocate(3));
     }
@@ -71,7 +70,7 @@ void testC()
 {
     for (int i = 0; i < 2000; i++)
     {
-        Text_putString("C");
+        Text_printString("C");
         for (int j = 0; j < 50000; j++);
     }
 }
@@ -85,7 +84,7 @@ noreturn forkBomb()
 void testSleep()
 {
     Threading_sleep(5000);
-    Text_putString("\nDone sleeping\n");
+    Text_printString("\nDone sleeping\n");
 }
 
 noreturn Kernel_main(multiboot_header *multiboot, u32 magic)
@@ -106,20 +105,20 @@ noreturn Kernel_main(multiboot_header *multiboot, u32 magic)
     Init_initialize(Init_Driver_keyboard);
     Init_initialize(Init_Driver_threading);
     
-    Text_putString("\nProxos Kernel\n Version " VERSION "\n  " COMPILED "\n  " COMPILER "\n Booted with ");
-    Text_putString(multiboot->bootloader_name);
-    Text_putString(" ");
-    Text_putString(multiboot->cmdline);
-    Text_putString("\n 0x");
-    Text_putString(String_formatInt((u32) &Kernel_linkStart, 16));
-    Text_putString(" - 0x");
-    Text_putString(String_formatInt((u32) &Kernel_linkEnd, 16));
-    Text_putString("\n\n");
+    Text_printString("\nProxos Kernel\n Version " VERSION "\n  " COMPILED "\n  " COMPILER "\n Booted with ");
+    Text_printString(multiboot->bootloader_name);
+    Text_printString(" ");
+    Text_printString(multiboot->cmdline);
+    Text_printString("\n 0x");
+    Text_printString(String_formatInt((u32) &Kernel_linkStart, 16));
+    Text_printString(" - 0x");
+    Text_printString(String_formatInt((u32) &Kernel_linkEnd, 16));
+    Text_printString("\n\n");
 
     String lastInput = Memory_allocate(1);
     while (true)
     {
-        Text_putString("$ ");
+        Text_printString("$ ");
         String input = Keyboard_getString(true);
 
         if (String_equals(input, "\x90"))
@@ -147,7 +146,7 @@ noreturn Kernel_main(multiboot_header *multiboot, u32 magic)
         else if (String_equals(input, "sleeptest"))
             Threading_fork(testSleep);
         else if (String_equals(input, "help"))
-            Text_putString("panic, headerdump, beep, forktest, threaddump, forkbomb, sleeptest\n");
+            Text_printString("panic, headerdump, beep, forktest, threaddump, forkbomb, sleeptest\n");
 
         if (lastInput != input)
             Memory_free(lastInput);

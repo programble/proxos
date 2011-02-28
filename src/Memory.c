@@ -169,19 +169,19 @@ void *Memory_reallocate(void *memory, u32 size)
 
 void Memory_headerDump()
 {
-    Text_putString("HEADER\t\tMAGIC\t\tPREVIOUS\tNEXT\t\tSIZE\n");
+    Text_printString("HEADER\t\tMAGIC\t\tPREVIOUS\tNEXT\t\tSIZE\n");
     for (Memory_Header *header = Memory_Header_first; header; header = header->next)
     {
-        Text_putString("0x");
-        Text_putString(String_formatInt((u32) header, 16));
-        Text_putString("\t0x");
-        Text_putString(String_formatInt(header->magic, 16));
-        Text_putString(header->previous ? "\t0x" : "\t");
-        Text_putString(header->previous ? String_formatInt((u32) header->previous, 16) : "NULL\t");
-        Text_putString(header->next ? "\t0x" : "\t");
-        Text_putString(header->next ? String_formatInt((u32) header->next, 16) : "NULL\t");
-        Text_putString("\t0x");
-        Text_putString(String_formatInt(header->size, 16));
-        Text_putString("\n");
+        Text_printString("0x");
+        Text_printString(String_formatInt((u32) header, 16));
+        Text_printString("\t0x");
+        Text_printString(String_formatInt(header->magic, 16));
+        Text_printString(header->previous ? "\t0x" : "\t");
+        Text_printString(header->previous ? String_formatInt((u32) header->previous, 16) : "NULL\t");
+        Text_printString(header->next ? "\t0x" : "\t");
+        Text_printString(header->next ? String_formatInt((u32) header->next, 16) : "NULL\t");
+        Text_printString("\t0x");
+        Text_printString(String_formatInt(header->size, 16));
+        Text_printString("\n");
     }
 }

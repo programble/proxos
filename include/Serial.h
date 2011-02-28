@@ -8,4 +8,7 @@ Bool Serial_initialize();
 deprecated void Serial_putChar(char c);
 deprecated void Serial_putString(const String s);
 
+void Serial_printChar(char c);
+void Serial_printString(const String s);
+
 #endif

@@ -19,19 +19,19 @@ Bool Init__initialize(Init_Driver driver, const String name)
 {
     if (initialized[driver])
     {
-        Text_putString(":: ");
-        Text_putString(name);
-        Text_putString(" [DONE]\n");
+        Text_printString(":: ");
+        Text_printString(name);
+        Text_printString(" [DONE]\n");
         return true;
     }
-    Text_putString(":: ");
-    Text_putString(name);
-    Text_putString(" [BUSY]");
+    Text_printString(":: ");
+    Text_printString(name);
+    Text_printString(" [BUSY]");
     Bool status = init_functions[driver]();
     if (status)
-        Text_putString("\b\b\b\b\bDONE]\n");
+        Text_printString("\b\b\b\b\bDONE]\n");
     else
-        Text_putString("\b\b\b\b\bFAIL]\n");
+        Text_printString("\b\b\b\b\bFAIL]\n");
     initialized[driver] = status;
     return status;
 }

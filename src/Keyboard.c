@@ -184,7 +184,7 @@ char Keyboard_getChar(Bool echo)
     }
     char character = event->character;
     if (echo)
-        Text_putChar(character);
+        Text_printChar(character);
     Memory_free(event);
     return character;
 }

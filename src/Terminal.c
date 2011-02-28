@@ -66,7 +66,17 @@ void Terminal_moveBack()
     Terminal_updateCursor();
 }
 
-void Terminal_putChar(u8 c)
+void Terminal_putChar(char c)
+{
+    Terminal_printChar(c);
+}
+
+void Terminal_putString(const String s)
+{
+    Terminal_printString(s);
+}
+
+void Terminal_printChar(char c)
 {
     Locking_acquireLock(Locking_Lock_terminal);
     Bool backspace = false;
@@ -108,10 +118,10 @@ void Terminal_putChar(u8 c)
     Locking_releaseLock(Locking_Lock_terminal);
 }
 
-void Terminal_putString(const String s)
+void Terminal_printString(const String s)
 {
     for (u32 i = 0; i < String_length(s); i++)
-        Terminal_putChar(s[i]);
+        Terminal_printChar(s[i]);
 }
 
 void Terminal_setForegroundColor(Terminal_Color color, Bool bright)

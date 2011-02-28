@@ -166,25 +166,25 @@ Bool Threading_initialize()
 void Threading_threadDump()
 {
     Kernel_disableInterrupts();
-    Text_putString("  ID\tSTATUS\tPRI\tCOUNTER\tWAKE\tSTACK\t\tFUNCTION\n");
+    Text_printString("  ID\tSTATUS\tPRI\tCOUNTER\tWAKE\tSTACK\t\tFUNCTION\n");
     Threading_Thread *thread = Threading_currentThread;
     for (u32 i = 0; i < Threading_threads; i++)
     {
-        Text_putString((thread == Threading_currentThread) ? "->" : "  ");
-        Text_putString(String_formatInt(thread->id, 10));
-        Text_putString("\t");
-        Text_putString(String_formatInt(thread->status, 10));
-        Text_putString("\t");
-        Text_putString(String_formatInt(thread->priority, 10));
-        Text_putString("\t");
-        Text_putString(String_formatInt(thread->counter, 10));
-        Text_putString("\t");
-        Text_putString((thread->wakeTime) ? String_formatInt(thread->wakeTime - Time_ticks, 10) : "AWAKE");
-        Text_putString("\t0x");
-        Text_putString(String_formatInt((u32) thread->stack, 16));
-        Text_putString("\t0x");
-        Text_putString(String_formatInt((u32) thread->function, 16));
-        Text_putString("\n");
+        Text_printString((thread == Threading_currentThread) ? "->" : "  ");
+        Text_printString(String_formatInt(thread->id, 10));
+        Text_printString("\t");
+        Text_printString(String_formatInt(thread->status, 10));
+        Text_printString("\t");
+        Text_printString(String_formatInt(thread->priority, 10));
+        Text_printString("\t");
+        Text_printString(String_formatInt(thread->counter, 10));
+        Text_printString("\t");
+        Text_printString((thread->wakeTime) ? String_formatInt(thread->wakeTime - Time_ticks, 10) : "AWAKE");
+        Text_printString("\t0x");
+        Text_printString(String_formatInt((u32) thread->stack, 16));
+        Text_printString("\t0x");
+        Text_printString(String_formatInt((u32) thread->function, 16));
+        Text_printString("\n");
         thread = thread->next;
     }
     Kernel_enableInterrupts();
