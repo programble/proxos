@@ -25,27 +25,39 @@ Clears the hardware terminal by filling it with space characters using
 the current colors and sets the hardware cursor position to the top
 left corner.
 
-## `void Terminal_putChar(u8 c)`
+## `void Terminal_printChar(char c)`
 
-Outputs a character `c` to the hardware terminal at the hardware cursor
-and advances the cursor by one.
+Outputs a character `c` to the hardware terminal at the hardware
+cursor and advances the cursor by one.
 
-## `void Terminal_putString(const String s)`
+## `void Terminal_printString(const String s)`
 
 Outputs the string `s` to the hardware terminal by calling
-`Terminal_putChar` on each character.
+`Terminal_printChar` on each character.
+
+## `void Terminal_putChar(char c, u8 x, u8 y)`
+
+Outputs the character `c` to the hardware terminal at the position
+`(x, y)`.
+
+## `void Terminal_putString(const String s, u8 x, u8 y)`
+
+Outputs the string `s` to the hardware terminal at the position `(x,
+y)`.
 
 ## `void Terminal_setForegroundColor(Terminal_Color color, Bool bright)`
 
-Sets the current foreground color of the hardware terminal to `color`. This will
-be used when outputting characters to the terminal. The `bright`
-parameter determines if the color should be bright or not.
+Sets the current foreground color of the hardware terminal to
+`color`. This will be used when outputting characters to the
+terminal. The `bright` parameter determines if the color should be
+bright or not.
 
 ## `void Terminal_setBackgroundColor(Terminal_Color color, Bool bright)`
 
-Sets the current background color of the hardware terminal to `color`. This will
-be used when outputting characters to the terminal. The `bright`
-parameter determines if the color should be bright or not.
+Sets the current background color of the hardware terminal to
+`color`. This will be used when outputting characters to the
+terminal. The `bright` parameter determines if the color should be
+bright or not.
 
 ## `#define Terminal_setColor(fg, fb, bg, bb) Terminal_setForegroundColor(fg, fb); Terminal_setBackgroundColor(bg, bb)`
 
