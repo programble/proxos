@@ -5,7 +5,7 @@
 
 Bool Serial_initialize();
 
-void Serial_putChar(char c);
-void Serial_putString(const String s);
+deprecated void Serial_putChar(char c);
+deprecated void Serial_putString(const String s);
 
 #endif

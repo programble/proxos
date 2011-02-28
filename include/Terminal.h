@@ -19,8 +19,8 @@ typedef enum
 Bool Terminal_initialize();
 
 void Terminal_clear();
-void Terminal_putChar(u8 c);
-void Terminal_putString(const String s);
+deprecated void Terminal_putChar(u8 c);
+deprecated void Terminal_putString(const String s);
 
 void Terminal_setForegroundColor(Terminal_Color color, Bool bright);
 void Terminal_setBackgroundColor(Terminal_Color color, Bool bright);

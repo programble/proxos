@@ -3,7 +3,7 @@
 
 #include <Kernel.h>
 
-void Text_putChar(char c);
-void Text_putString(const String s);
+deprecated void Text_putChar(char c);
+deprecated void Text_putString(const String s);
 
 #endif
