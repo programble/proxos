@@ -15,7 +15,7 @@ void Time_phase(u32 hz)
     Kernel_outportb(0x40, divisor >> 8);
 }
 
-void Time_tickHandler(Isr_Registers *r)
+void Time_tickHandler(unused Isr_Registers *r)
 {
     Time_ticks++;
 

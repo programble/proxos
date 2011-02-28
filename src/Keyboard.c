@@ -127,7 +127,7 @@ Keyboard_Event *Keyboard_EventQueue_dequeue()
     return event;
 }
 
-void Keyboard_handler(Isr_Registers *r)
+void Keyboard_handler(unused Isr_Registers *r)
 {
     u8 keyCode = Kernel_inportb(0x60);
 
