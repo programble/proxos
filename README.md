@@ -26,6 +26,13 @@ Programble's toy OS.
   * `KERNEL` Default: `proxos.elf`
   * `ISO` Default: `proxos.iso`
 
+## Running
+
+Two makefile targets are provided for starting Proxos in a VM:
+
+    make qemu
+    make bochs
+
 ## Features
 
 Things I can brag about:
