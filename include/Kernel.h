@@ -23,6 +23,11 @@ typedef signed int s32;
 typedef unsigned long long u64;
 typedef signed long long s64;
 
+/* Modifiers */
+#define always_inline __attribute__((gnu_inline,always_inline)) static inline
+#define deprecated __attribute__((deprecated))
+#define noreturn __attribute__((noreturn)) void
+
 #define String char*
 
 typedef enum

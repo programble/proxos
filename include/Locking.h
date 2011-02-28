@@ -14,7 +14,7 @@ typedef enum
 static Bool Locking_locks[Locking_Lock_size] = {false};
 
 /* Must be inline! */
-static inline Bool Locking_setLock(Locking_Lock lock)
+always_inline Bool Locking_setLock(Locking_Lock lock)
 {
     /* <nixeagle> first argument = pointer to lock, second argument is the what should go in the EAX register... so 0x0 in your case, and the 3rd argument is what you want to set the lock to on success... so in your case 0x1.
     intel manual 2A page 264

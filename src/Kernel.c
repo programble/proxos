@@ -85,7 +85,7 @@ void testSleep()
     Text_putString("\nDone sleeping\n");
 }
 
-void Kernel_main(multiboot_header *multiboot, u32 magic)
+noreturn Kernel_main(multiboot_header *multiboot, u32 magic)
 {
     Kernel_assert(magic == MULTIBOOT_BOOTLOADER_MAGIC, "Invalid bootloader magic");
     Kernel_multiboot = multiboot;
