@@ -20,7 +20,7 @@ Programble's toy OS.
 
   * `STAGE2` Default: `/usr/lib/grub/i386-pc/stage2_eltorito`
   * `GENISOIMAGE` Default: `genisoimage`
-  * `CC` Default: `gcc`
+  * `CC` Default: `clang`
   * `ASM` Default: `nasm`
   * `LD` Default: `ld`
   * `KERNEL` Default: `proxos.elf`
