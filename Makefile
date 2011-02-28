@@ -96,5 +96,5 @@ sloc:
 check-syntax: include/version.h
 	$(CC) $(CFLAGS) $(CWARNINGS) $(CINCLUDES) -fsyntax-only $(CHK_SOURCES)
 
-.PHONY: iso clean qemu qemu-gdb todo sloc check-syntax debug
+.PHONY: iso clean qemu qemu-gdb todo sloc check-syntax debug dry-pp dry-asm
 
