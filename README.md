@@ -10,7 +10,7 @@ Programble's toy OS.
 
 ### Dependencies
 
-  * GRUB
+  * GRUB (Or at least `stage2_eltorito`, which can be downloaded [here](http://misc.duckinator.net/stage2_eltorito))
   * `genisoimage` or `mkiso`
   * C99 Compiler
   * NASM
