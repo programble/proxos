@@ -27,13 +27,3 @@ void Serial_printString(const String s)
     for (u32 i = 0; i < String_length(s); i++)
         Serial_printChar(s[i]);
 }
-
-void Serial_putChar(char c)
-{
-    Serial_printChar(c);
-}
-
-void Serial_putString(const String s)
-{
-    Serial_printString(s);
-}

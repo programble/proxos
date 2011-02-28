@@ -19,8 +19,9 @@ typedef enum
 Bool Terminal_initialize();
 
 void Terminal_clear();
-deprecated void Terminal_putChar(char c);
-deprecated void Terminal_putString(const String s);
+void Terminal_putChar(char c, u8 x, u8 y);
+void Terminal_putString(const String s, u8 x, u8 y);
+
 void Terminal_printChar(char c);
 void Terminal_printString(const String s);
 

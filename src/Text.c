@@ -19,13 +19,3 @@ void Text_printString(const String s)
     if (Init_initialized(Init_Driver_terminal))
         Terminal_printString(s);
 }
-
-void Text_putChar(char c)
-{
-    Text_printChar(c);
-}
-
-void Text_putString(const String s)
-{
-    Text_printString(s);
-}

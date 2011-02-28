@@ -66,14 +66,17 @@ void Terminal_moveBack()
     Terminal_updateCursor();
 }
 
-void Terminal_putChar(char c)
+void Terminal_putChar(char c, u8 x, u8 y)
 {
-    Terminal_printChar(c);
+    u16 attributes = ((Terminal_backgroundColor | (Terminal_backgroundBright << 3)) << 4) | ((Terminal_foregroundColor | (Terminal_foregroundBright << 3)) & 0x0F);
+    u16 *location = Terminal_ram + (y * TTY_COLS + x);
+    *location = c | (attributes << 8);
 }
 
-void Terminal_putString(const String s)
+void Terminal_putString(const String s, u8 x, u8 y)
 {
-    Terminal_printString(s);
+    for (u32 i = 0; i < String_length(s); i++, x++)
+        Terminal_putChar(s[i], x, y);
 }
 
 void Terminal_printChar(char c)
@@ -96,9 +99,7 @@ void Terminal_printChar(char c)
         c = ' ';
     default:
     {
-        u16 attributes = ((Terminal_backgroundColor | (Terminal_backgroundBright << 3)) << 4) | ((Terminal_foregroundColor | (Terminal_foregroundBright << 3)) & 0x0F);
-        u16 *location = Terminal_ram + (Terminal_cursor.y * TTY_COLS + Terminal_cursor.x);
-        *location = c | (attributes << 8);
+        Terminal_putChar(c, Terminal_cursor.x, Terminal_cursor.y);
         Terminal_cursor.x++;
     }
     }
