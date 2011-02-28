@@ -91,19 +91,19 @@ noreturn Kernel_main(multiboot_header *multiboot, u32 magic)
 {
     Kernel_assert(magic == MULTIBOOT_BOOTLOADER_MAGIC, "Invalid bootloader magic");
     Kernel_multiboot = multiboot;
-    Init_initialize(Init_Driver_serial);
-    Init_initialize(Init_Driver_terminal);
+    Init_initialize(Init_Component_serial);
+    Init_initialize(Init_Component_terminal);
     
-    Init_initialize(Init_Driver_gdt);
-    Init_initialize(Init_Driver_idt);
-    Init_initialize(Init_Driver_isr);
-    Init_initialize(Init_Driver_irq);
+    Init_initialize(Init_Component_gdt);
+    Init_initialize(Init_Component_idt);
+    Init_initialize(Init_Component_isr);
+    Init_initialize(Init_Component_irq);
     Kernel_enableInterrupts();
 
-    Init_initialize(Init_Driver_memory);
-    Init_initialize(Init_Driver_time);
-    Init_initialize(Init_Driver_keyboard);
-    Init_initialize(Init_Driver_threading);
+    Init_initialize(Init_Component_memory);
+    Init_initialize(Init_Component_time);
+    Init_initialize(Init_Component_keyboard);
+    Init_initialize(Init_Component_threading);
     
     Text_printString("\nProxos Kernel\n Version " VERSION "\n  " COMPILED "\n  " COMPILER "\n Booted with ");
     Text_printString(multiboot->bootloader_name);

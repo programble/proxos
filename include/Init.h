@@ -5,22 +5,22 @@
 
 typedef enum
 {
-    Init_Driver_serial,
-    Init_Driver_terminal,
-    Init_Driver_gdt,
-    Init_Driver_idt,
-    Init_Driver_isr,
-    Init_Driver_irq,
-    Init_Driver_memory,
-    Init_Driver_time,
-    Init_Driver_keyboard,
-    Init_Driver_threading,
-    Init_Driver__size
-} Init_Driver;
+    Init_Component_serial,
+    Init_Component_terminal,
+    Init_Component_gdt,
+    Init_Component_idt,
+    Init_Component_isr,
+    Init_Component_irq,
+    Init_Component_memory,
+    Init_Component_time,
+    Init_Component_keyboard,
+    Init_Component_threading,
+    Init_Component__size /* For size of enum; not a real item */
+} Init_Component;
 
-Bool Init__initialize(Init_Driver driver, const String name);
+Bool Init__initialize(Init_Component driver, const String name);
 #define Init_initialize(x) Init__initialize(x, MACRO_STRING(x))
-Bool Init_initialized(Init_Driver driver);
+Bool Init_initialized(Init_Component driver);
 #define Init_assertInitialized(x) Kernel_assert(Init_initialized(x), MACRO_STRING(x) " not initialized")
 
 #endif

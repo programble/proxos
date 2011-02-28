@@ -32,7 +32,7 @@ static inline void Locking_acquireLock(Locking_Lock lock)
     Kernel_assert(lock < Locking_Lock__size, "Trying to acquire an invalid lock");
     while (!Locking_setLock(lock))
     {
-        if (Init_initialized(Init_Driver_threading))
+        if (Init_initialized(Init_Component_threading))
             Threading_yield();
     }
 }

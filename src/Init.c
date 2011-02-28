@@ -12,10 +12,10 @@
 #include <Keyboard.h>
 #include <Threading.h>
 
-Bool (*init_functions[Init_Driver__size])() = {Serial_initialize, Terminal_initialize, Gdt_initialize, Idt_initialize, Isr_initialize, Irq_initialize, Memory_initialize, Time_initialize, Keyboard_initialize, Threading_initialize};
-Bool initialized[Init_Driver__size] = {false};
+Bool (*init_functions[Init_Component__size])() = {Serial_initialize, Terminal_initialize, Gdt_initialize, Idt_initialize, Isr_initialize, Irq_initialize, Memory_initialize, Time_initialize, Keyboard_initialize, Threading_initialize};
+Bool initialized[Init_Component__size] = {false};
 
-Bool Init__initialize(Init_Driver driver, const String name)
+Bool Init__initialize(Init_Component driver, const String name)
 {
     if (initialized[driver])
     {
@@ -36,7 +36,7 @@ Bool Init__initialize(Init_Driver driver, const String name)
     return status;
 }
 
-Bool Init_initialized(Init_Driver driver)
+Bool Init_initialized(Init_Component driver)
 {
     return initialized[driver];
 }
