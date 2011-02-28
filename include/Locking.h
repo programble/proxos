@@ -9,10 +9,10 @@ typedef enum
 {
     Locking_Lock_terminal,
     Locking_Lock_memory,
-    Locking_Lock_size /* For getting the number of locks; not a real lock */
+    Locking_Lock__size /* For getting the number of locks; not a real lock */
 } Locking_Lock;
 
-static Bool Locking_locks[Locking_Lock_size] = {false};
+static Bool Locking_locks[Locking_Lock__size] = {false};
 
 /* Must be inline! */
 always_inline Bool Locking_setLock(Locking_Lock lock)
@@ -29,6 +29,7 @@ always_inline Bool Locking_setLock(Locking_Lock lock)
 
 static inline void Locking_acquireLock(Locking_Lock lock)
 {
+    Kernel_assert(lock < Locking_Lock__size, "Trying to acquire an invalid lock");
     while (!Locking_setLock(lock))
     {
         if (Init_initialized(Init_Driver_threading))
@@ -38,6 +39,7 @@ static inline void Locking_acquireLock(Locking_Lock lock)
 
 static inline void Locking_releaseLock(Locking_Lock lock)
 {
+    Kernel_assert(lock < Locking_Lock__size, "Trying to release an invalid lock");
     Locking_locks[lock] = false;
 }
 
