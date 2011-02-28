@@ -31,6 +31,7 @@ Programble's toy OS.
 Two makefile targets are provided for starting Proxos in a VM:
 
     make qemu
+
     make bochs
 
 ## Features
