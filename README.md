@@ -2,7 +2,16 @@ Proxos
 ======
 ![](http://stillmaintained.com/programble/proxos.png)
 
-Programble's toy OS.
+Proxos is a little OS written in C just for fun.
+
+## Features
+
+Things I can brag about:
+
+  * A nice memory manager
+  * A PC Speaker Driver (Woooo!)
+  * Threading
+  * A re-usable locking system (No global kernel lock)
 
 ## Building
 
@@ -37,15 +46,6 @@ Two makefile targets are provided for starting Proxos in a VM:
 
     make qemu
     make bochs
-
-## Features
-
-Things I can brag about:
-
-  * A nice memory manager
-  * A PC Speaker Driver (Woooo!)
-  * Threading
-  * A re-usable locking system (No global kernel lock)
 
 ## License
 
