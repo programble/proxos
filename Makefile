@@ -9,8 +9,7 @@ ASM=nasm
 LD=ld
 
 CINCLUDES=-Iinclude/
-CWARNINGS=-Wall -Wextra -Wunreachable-code
-#CFLAGS=-m32 -std=c99 -nostdlib -nostartfiles -nodefaultlibs -nostdinc -ffreestanding -fno-builtin
+CWARNINGS=-Werror -Wall -Wextra -Wunreachable-code -Wconversion -Wcast-qual -Wcast-align -Wswitch-enum -Wmissing-noreturn -Wwrite-strings -Wundef -Wpacked -Wredundant-decls -Winline -Wdisabled-optimization -Wbad-function-cast
 CFLAGS=-m32 -std=c99 -nostdinc -ffreestanding -fno-builtin
 DFLAGS=-ggdb -DDEBUG -O0
 
