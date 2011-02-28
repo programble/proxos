@@ -24,7 +24,7 @@ void Kernel_outportb(u16 port, u8 data)
 
 
 Bool recursivePanic = false;
-void Kernel__panic(const String message, const String function, const String file, const String line)
+noreturn Kernel__panic(const String message, const String function, const String file, const String line)
 {
     Kernel_disableInterrupts();
     if (recursivePanic)
@@ -44,6 +44,7 @@ void Kernel__panic(const String message, const String function, const String fil
     Text_putString("\n");
     Threading_threadDump();
     Kernel_halt();
+    while (true);
 }
 
 void testA()
