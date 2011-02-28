@@ -26,6 +26,11 @@ Programble's toy OS.
   * `KERNEL` Default: `proxos.elf`
   * `ISO` Default: `proxos.iso`
 
+### Tested Compilers
+
+  * Clang on Linux x86_64
+  * GCC on Linux x86_64
+
 ## Running
 
 Two makefile targets are provided for starting Proxos in a VM:
