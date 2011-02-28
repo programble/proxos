@@ -152,10 +152,12 @@ noreturn Kernel_main(multiboot_header *multiboot, u32 magic)
             Threading_fork(forkBomb);
         else if (String_equals(input, "sleeptest"))
             Threading_fork(testSleep);
-        else if (String_equals(input, "help"))
-            Text_printString("panic, headerdump, beep, forktest, threaddump, forkbomb, sleeptest\n");
         else if (String_equals(input, "reboot"))
             Kernel_reboot();
+        else if (String_equals(input, "help"))
+            Text_printString("panic, headerdump, beep, forktest, threaddump, forkbomb, sleeptest, reboot\n");
+        else
+            Text_printString("?\n");
 
         if (lastInput != input)
             Memory_free(lastInput);
