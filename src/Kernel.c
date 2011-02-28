@@ -74,7 +74,7 @@ void testC()
     }
 }
 
-void forkBomb()
+noreturn forkBomb()
 {
     while (true)
         Threading_fork(forkBomb);

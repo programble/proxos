@@ -32,7 +32,7 @@ void Threading_removeThread(Threading_Thread *thread)
     Threading_threads--;
 }
 
-void Threading_endThread()
+noreturn Threading_endThread()
 {
     Threading_currentThread->status = Threading_ThreadStatus_zombie;
     Threading_currentThread->counter = 0;

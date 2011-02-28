@@ -3,15 +3,14 @@
 
 #include <Kernel.h>
 
-struct Idt_Entry
+typedef struct
 {
     u16 baseLow;
     u16 sel;
     u8 always0;
     u8 flags;
     u16 baseHigh;
-} __attribute__((packed));
-typedef struct Idt_Entry Idt_Entry;
+} Idt_Entry;
 
 struct Idt_Pointer
 {

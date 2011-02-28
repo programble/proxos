@@ -3,7 +3,7 @@
 
 #include <Kernel.h>
 
-struct Gdt_Entry
+typedef struct
 {
     u16 limitLow;
     u16 baseLow;
@@ -11,8 +11,7 @@ struct Gdt_Entry
     u8 access;
     u8 granularity;
     u8 baseHigh;
-} __attribute__((packed));
-typedef struct Gdt_Entry Gdt_Entry;
+} Gdt_Entry;
 
 struct Gdt_Pointer
 {
