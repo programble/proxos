@@ -22,6 +22,7 @@ typedef struct Idt_Pointer Idt_Pointer;
 extern void Idt_load(); /* Idt.asm */
 
 void Idt_setGate(u8 num, u64 base, u16 sel, u8 flags);
+void Idt_setLimit(u16 limit);
 Bool Idt_initialize();
 
 #endif

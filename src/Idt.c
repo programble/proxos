@@ -14,6 +14,12 @@ void Idt_setGate(u8 num, u64 base, u16 sel, u8 flags)
     idt[num].always0 = 0x0;
 }
 
+void Idt_setLimit(u16 limit)
+{
+    idtp.limit = limit;
+    Idt_load();
+}
+
 Bool Idt_initialize()
 {
     idtp.limit = (sizeof(Idt_Entry) * 256) -1;

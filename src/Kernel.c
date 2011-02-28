@@ -9,6 +9,7 @@
 #include <Keyboard.h>
 #include <PCSpeaker.h>
 #include <Threading.h>
+#include <Idt.h>
 
 u8 Kernel_inportb(u16 port)
 {
@@ -20,6 +21,12 @@ u8 Kernel_inportb(u16 port)
 void Kernel_outportb(u16 port, u8 data)
 {
     __asm__ __volatile__("outb %1, %0" : : "dN" (port), "a" (data));
+}
+
+void Kernel_reboot()
+{
+    Idt_setLimit(0);
+    asm("int $0x1");
 }
 
 Bool recursivePanic = false;
@@ -147,6 +154,8 @@ noreturn Kernel_main(multiboot_header *multiboot, u32 magic)
             Threading_fork(testSleep);
         else if (String_equals(input, "help"))
             Text_printString("panic, headerdump, beep, forktest, threaddump, forkbomb, sleeptest\n");
+        else if (String_equals(input, "reboot"))
+            Kernel_reboot();
 
         if (lastInput != input)
             Memory_free(lastInput);

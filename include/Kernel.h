@@ -45,6 +45,7 @@ extern void *Kernel_linkEnd;
 
 /* Halt, panic, assert! */
 #define Kernel_halt() asm("cli;hlt")
+void Kernel_reboot();
 
 void Kernel__panic(const String message, const String function, const String file, const String line);
 
