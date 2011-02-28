@@ -53,6 +53,7 @@ void testA()
     {
         Text_putString("A");
         for (int j = 0; j < 50000; j++);
+        Memory_free(Memory_allocate(2));
     }
 }
 
@@ -62,6 +63,7 @@ void testB()
     {
         Text_putString("B");
         for (int j = 0; j < 50000; j++);
+        Memory_free(Memory_allocate(3));
     }
 }
 

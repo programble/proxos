@@ -8,6 +8,7 @@
 typedef enum
 {
     Locking_Lock_terminal,
+    Locking_Lock_memory,
     Locking_Lock_size /* For getting the number of locks; not a real lock */
 } Locking_Lock;
 

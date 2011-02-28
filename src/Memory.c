@@ -3,6 +3,7 @@
 #include <Multiboot.h>
 #include <Text.h>
 #include <String.h>
+#include <Locking.h>
 
 #define MEMORY_HEADER_MAGIC_FREE 0xE1AFE909
 #define MEMORY_HEADER_MAGIC_USED 0xE1AFE908
@@ -87,7 +88,7 @@ Bool Memory_initialize()
 
 void *Memory_allocate(u32 size)
 {
-    Kernel_disableInterrupts();
+    Locking_acquireLock(Locking_Lock_memory);
 
     Kernel_assert(size > 0, "Cannot allocate 0 size block");
 
@@ -102,7 +103,7 @@ void *Memory_allocate(u32 size)
         if (header->size == size)
         {
             Memory_Header_setUsed(header);
-            Kernel_enableInterrupts();
+            Locking_releaseLock(Locking_Lock_memory);
             return Memory_Header_blockStart(header);
         }
         /* Block is bigger and can be split */
@@ -117,7 +118,7 @@ void *Memory_allocate(u32 size)
             header->next = leftover;
             header->size = size;
             Memory_Header_setUsed(header);
-            Kernel_enableInterrupts();
+            Locking_releaseLock(Locking_Lock_memory);
             return Memory_Header_blockStart(header);
         }
     }
@@ -127,7 +128,7 @@ void *Memory_allocate(u32 size)
 
 void Memory_free(void *memory)
 {
-    Kernel_disableInterrupts();
+    Locking_acquireLock(Locking_Lock_memory);
 
     Memory_Header *header = Memory_Header_fromBlock(memory);
     Memory_Header_assertMagic(header);
@@ -152,20 +153,17 @@ void Memory_free(void *memory)
         header->next->previous = header;
     }
 
-    Kernel_enableInterrupts();
+    Locking_releaseLock(Locking_Lock_memory);
 }
 
 void *Memory_reallocate(void *memory, u32 size)
 {
-    Kernel_disableInterrupts();
-
     void *new = Memory_allocate(size);
     Memory_Header *header = Memory_Header_fromBlock(memory);
     Memory_Header_assertMagic(header);
     String_copy(new, memory, (size < header->size) ? size : header->size);
     Memory_free(memory);
 
-    Kernel_enableInterrupts();
     return new;
 }
 
