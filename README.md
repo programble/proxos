@@ -26,6 +26,15 @@ Programble's toy OS.
   * `KERNEL` Default: `proxos.elf`
   * `ISO` Default: `proxos.iso`
 
+## Features
+
+Things I can brag about:
+
+  * A nice memory manager
+  * A PC Speaker Driver (Woooo!)
+  * Threading
+  * A re-usable locking system (No global kernel lock)
+
 ## License
 
 Copyright (c) 2011, Curtis McEnroe <programble@gmail.com>
