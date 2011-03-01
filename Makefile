@@ -5,7 +5,8 @@ ISO=proxos.iso
 
 ISOLINUXBIN=/usr/lib/syslinux/isolinux.bin
 ISOLINUXMBOOTC32=/usr/lib/syslinux/mboot.c32
-ISOLINUXISO=proxos-isolinux.iso
+
+BOOTLOADER=grub
 
 # Compiling options
 CC=clang
@@ -33,8 +34,11 @@ KERNEL=proxos.elf
 all: Makefile iso
 
 iso: $(ISO)
+
+ifeq ($(BOOTLOADER),grub)
 $(ISO): iso/boot/$(KERNEL) iso/boot/grub/stage2_eltorito iso/boot/grub/menu.lst
 	$(GENISOIMAGE) -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o $(ISO) iso/
+endif
 
 iso/boot/grub/stage2_eltorito: $(STAGE2)
 	mkdir -p iso/boot/grub/
@@ -49,10 +53,11 @@ iso/boot/grub/menu.lst: menu.lst
 	cp $< $@
 	echo "kernel /boot/$(KERNEL)" >> $@
 
-isolinux: $(ISOLINUXISO)
-$(ISOLINUXISO): iso/boot/$(KERNEL) iso/boot/isolinux/isolinux.bin iso/boot/isolinux/mboot.c32 iso/boot/isolinux/isolinux.cfg
-	$(GENISOIMAGE) -R -b boot/isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -o $(ISOLINUXISO) iso/
-	isohybrid $(ISOLINUXISO)
+ifeq ($(BOOTLOADER),isolinux)
+$(ISO): iso/boot/$(KERNEL) iso/boot/isolinux/isolinux.bin iso/boot/isolinux/mboot.c32 iso/boot/isolinux/isolinux.cfg
+	$(GENISOIMAGE) -R -b boot/isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -o $(ISO) iso/
+	isohybrid $(ISO)
+endif
 
 iso/boot/isolinux/isolinux.bin: $(ISOLINUXBIN)
 	mkdir -p iso/boot/isolinux
