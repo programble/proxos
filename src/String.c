@@ -39,7 +39,7 @@ Bool String_equals(const String a, const String b)
 String String_formatInt(u32 n, u32 radix)
 {
     char numerals[16] = "0123456789ABCDEF";
-    static char s[33];
+    static char s[34];
     s[33] = 0;
     u32 i = 33;
     do
