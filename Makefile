@@ -15,7 +15,7 @@ LD=ld
 
 CINCLUDES=-Iinclude/
 CWARNINGS=-Wall -Wextra -Wunreachable-code -Wcast-qual -Wcast-align -Wswitch-enum -Wmissing-noreturn -Wwrite-strings -Wundef -Wpacked -Wredundant-decls -Winline -Wdisabled-optimization -Wbad-function-cast
-CFLAGS=-m32 -std=c99 -nostdinc -ffreestanding -fno-builtin -MD
+CFLAGS=-m32 -std=c99 -nostdinc -ffreestanding -fno-builtin -MMD
 DFLAGS=-ggdb -DDEBUG -O0
 
 AFLAGS=-f elf
@@ -94,7 +94,7 @@ $(KERNEL): include/version.h $(AOBJECTS) $(COBJECTS)
 %.ao: %.asm
 	$(ASM) $(AFLAGS) $< -o $@
 
-include/version.h: $(CSOURCES)
+include/version.h:
 	echo "#define VERSION \"$(shell git describe --tags HEAD | cut -c2-)\"" > $@
 	echo "#define COMPILER \"$(CC) \" __VERSION__" >> $@
 

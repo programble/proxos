@@ -117,6 +117,9 @@ void Terminal_printChar(char c)
     Terminal_scroll();
     Terminal_updateCursor();
     Locking_releaseLock(Locking_Lock_terminal);
+#ifdef CSI
+    for (int i = 0; i < 5000000; i++);
+#endif
 }
 
 void Terminal_printString(const String s)
