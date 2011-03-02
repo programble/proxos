@@ -165,7 +165,6 @@ Bool Threading_initialize()
 
 void Threading_threadDump()
 {
-    Kernel_disableInterrupts();
     Text_printString("  ID\tSTATUS\tPRI\tCOUNTER\tWAKE\tSTACK\t\tFUNCTION\n");
     Threading_Thread *thread = Threading_currentThread;
     for (u32 i = 0; i < Threading_threads; i++)
@@ -187,5 +186,4 @@ void Threading_threadDump()
         Text_printString("\n");
         thread = thread->next;
     }
-    Kernel_enableInterrupts();
 }
