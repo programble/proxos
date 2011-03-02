@@ -15,7 +15,7 @@ LD=ld
 
 CINCLUDES=-Iinclude/
 CWARNINGS=-Wall -Wextra -Wunreachable-code -Wcast-qual -Wcast-align -Wswitch-enum -Wmissing-noreturn -Wwrite-strings -Wundef -Wpacked -Wredundant-decls -Winline -Wdisabled-optimization -Wbad-function-cast
-CFLAGS=-m32 -std=c99 -nostdinc -ffreestanding -fno-builtin
+CFLAGS=-m32 -std=c99 -nostdinc -ffreestanding -fno-builtin -MD
 DFLAGS=-ggdb -DDEBUG -O0
 
 AFLAGS=-f elf
@@ -86,6 +86,8 @@ kernel: $(KERNEL)
 $(KERNEL): include/version.h $(AOBJECTS) $(COBJECTS)
 	$(LD) $(LDFLAGS) $(AOBJECTS) $(COBJECTS) -o $@
 
+-include $(COBJECTS:.o=.d)
+
 %.o: %.c
 	$(CC) $(CFLAGS) $(CWARNINGS) $(CINCLUDES) -c $< -o $@
 
@@ -108,6 +110,7 @@ dry-pp:
 clean:
 	rm -f include/version.h
 	rm -f $(COBJECTS)
+	rm -f $(COBJECTS:.o=.d)
 	rm -f $(AOBJECTS)
 	rm -f $(KERNEL)
 	rm -f $(ISO)
