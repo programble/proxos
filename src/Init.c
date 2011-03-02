@@ -19,19 +19,28 @@ Bool Init__initialize(Init_Component driver, const String name)
 {
     if (initialized[driver])
     {
-        Text_printString(":: ");
-        Text_printString(name);
-        Text_printString(" [DONE]\n");
         return true;
     }
     Text_printString(":: ");
     Text_printString(name);
-    Text_printString(" [BUSY]");
+    if (Init_initialized(Init_Component_terminal))
+        Terminal_putString("[BUSY]", 73, Terminal_getCursorY());
+    Serial_printString(" [BUSY]");
     Bool status = init_functions[driver]();
     if (status)
-        Text_printString("\b\b\b\b\bDONE]\n");
+    {
+        if (Init_initialized(Init_Component_terminal))
+            Terminal_putString("[DONE]", 73, Terminal_getCursorY());
+        Serial_printString("\b\b\b\b\bDONE]\n");
+    }
     else
-        Text_printString("\b\b\b\b\bFAIL]\n");
+    {
+        if (Init_initialized(Init_Component_terminal))
+            Terminal_putString("[FAIL]", 73, Terminal_getCursorY());
+        Serial_printString("\b\b\b\b\bFAIL]\n");
+    }
+    if (Init_initialized(Init_Component_terminal))
+        Terminal_printChar('\n');
     initialized[driver] = status;
     return status;
 }
