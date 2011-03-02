@@ -9,7 +9,6 @@
 #include <Keyboard.h>
 #include <PCSpeaker.h>
 #include <Threading.h>
-#include <Idt.h>
 
 u8 Kernel_inportb(u16 port)
 {
@@ -23,10 +22,14 @@ void Kernel_outportb(u16 port, u8 data)
     __asm__ __volatile__("outb %1, %0" : : "dN" (port), "a" (data));
 }
 
-void Kernel_reboot()
+noreturn Kernel_reboot()
 {
-    Idt_setLimit(0);
-    asm("int $0x1");
+    u8 x = 0x02;
+    while ((x & 0x02) != 0)
+        x = Kernel_inportb(0x64);
+    Kernel_outportb(0x64, 0xFE);
+    while (true)
+        Kernel_halt();
 }
 
 Bool recursivePanic = false;
