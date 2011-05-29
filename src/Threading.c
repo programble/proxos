@@ -45,7 +45,7 @@ void Threading_switchThreads()
     Kernel_assert(Threading_currentThread, "All the threads have run off!");
     
     /* Do nothing if there is only one thread */
-    if (Threading_currentThread == Threading_currentThread->next)
+    if (Threading_currentThread == Threading_currentThread->next && Threading_currentThread->status == Threading_ThreadStatus_running)
         return;
 
     /* If it's still the current thread's turn, do nothing */
@@ -101,6 +101,8 @@ void Threading_switchThreads()
             Threading_currentThread->next->wakeTime = 0;
             return;
         }
+        if (Threading_threads == 1)
+            return;
     /* Skip over paused/sleeping threads */
     case Threading_ThreadStatus_paused:
     {
