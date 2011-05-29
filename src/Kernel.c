@@ -54,6 +54,8 @@ noreturn Kernel__panic(const String message, const String function, const String
     Threading_threadDump();
     Text_printString("\nPress the any key to reboot...");
     u8 firstScancode = Kernel_inportb(0x60);
+    while (Kernel_inportb(0x60) == firstScancode);
+    firstScancode = Kernel_inportb(0x60);
     while (true)
     {
         u8 scancode = Kernel_inportb(0x60);
